@@ -6,9 +6,6 @@ package com.opensymphony.module.propertyset;
 
 import com.opensymphony.util.Data;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.w3c.dom.Document;
 
 import java.util.*;
@@ -44,10 +41,6 @@ import java.util.*;
  * @version $Revision$
  */
 public abstract class AbstractPropertySet implements PropertySet {
-    //~ Static fields/initializers /////////////////////////////////////////////
-
-    private static final Log logger = LogFactory.getLog(AbstractPropertySet.class);
-
     //~ Instance fields ////////////////////////////////////////////////////////
 
     protected PropertySetSchema schema;
@@ -180,8 +173,6 @@ public abstract class AbstractPropertySet implements PropertySet {
                 return ((Data) data).getBytes();
             } else if (data instanceof byte[]) {
                 return (byte[]) data;
-            } else {
-                logger.error("DATA type is " + data.getClass() + ", expected byte[] or Data");
             }
         } catch (NullPointerException e) {
             return null;
