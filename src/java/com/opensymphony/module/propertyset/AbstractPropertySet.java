@@ -105,14 +105,6 @@ public abstract class AbstractPropertySet implements PropertySet {
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
-    public abstract Collection getKeys(String prefix, int type) throws PropertyException;
-
-    public abstract int getType(String key) throws PropertyException;
-
-    public abstract boolean exists(String key) throws PropertyException;
-
-    public abstract void remove(String key) throws PropertyException;
-
     public void setAsActualType(String key, Object value) throws PropertyException {
         int type;
 

@@ -333,6 +333,11 @@ public class CachingPropertySet implements PropertySet, Serializable {
         }
     }
 
+    public void remove() throws PropertyException {
+        cachePS.remove();
+        decoratedPS.remove();
+    }
+
     public void remove(String key) throws PropertyException {
         cachePS.remove(key);
         decoratedPS.remove(key);

@@ -124,6 +124,10 @@ public class BeanIntrospectorPropertySet extends AbstractPropertySet {
         setBean(bean);
     }
 
+    public void remove() throws PropertyException {
+        //no-op, doesn't make sense to remove bean properties
+    }
+
     public void remove(String key) throws PropertyException {
         throw new PropertyImplementationException("Remove not supported in BeanIntrospectorPropertySet, use setXXX(null) instead");
     }

@@ -112,6 +112,10 @@ public class HibernatePropertySet extends AbstractPropertySet {
         configProvider.getPropertySetDAO().remove(entityName, entityId, key);
     }
 
+    public void remove() throws PropertyException {
+        configProvider.getPropertySetDAO().remove(entityName, entityId);
+    }
+
     protected void setImpl(int type, String key, Object value) throws PropertyException {
         PropertySetItem item = null;
 

@@ -60,10 +60,8 @@ public class OJBPropertySet extends AbstractPropertySet {
 
             Iterator iter = broker.getReportQueryIteratorByQuery(q);
 
-            Object[] obj = null;
-
             while (iter.hasNext()) {
-                obj = (Object[]) iter.next();
+                Object[] obj = (Object[]) iter.next();
 
                 String itemKey = (String) obj[0];
 
@@ -74,9 +72,7 @@ public class OJBPropertySet extends AbstractPropertySet {
 
             throw new PropertyException(e.getMessage());
         } finally {
-            if (broker != null) {
-                broker.close();
-            }
+            broker.close();
         }
 
         return list;
@@ -89,19 +85,17 @@ public class OJBPropertySet extends AbstractPropertySet {
         try {
             broker = this.getBroker();
 
-            Criteria critere = new Criteria();
-            critere.addEqualTo("globalKey", globalKey);
-            critere.addLike("itemKey", key);
+            Criteria criteria = new Criteria();
+            criteria.addEqualTo("globalKey", globalKey);
+            criteria.addLike("itemKey", key);
 
-            ReportQueryByCriteria q = QueryFactory.newReportQuery(OJBPropertySetItem.class, critere);
+            ReportQueryByCriteria q = QueryFactory.newReportQuery(OJBPropertySetItem.class, criteria);
             q.setColumns(new String[] {"itemType"});
 
             Iterator iter = broker.getReportQueryIteratorByQuery(q);
 
-            Object[] obj = null;
-
             if (iter.hasNext()) {
-                obj = (Object[]) iter.next();
+                Object[] obj = (Object[]) iter.next();
 
                 type = ((Integer) obj[0]).intValue();
             }
@@ -110,9 +104,7 @@ public class OJBPropertySet extends AbstractPropertySet {
 
             throw new PropertyException(e.getMessage());
         } finally {
-            if (broker != null) {
-                broker.close();
-            }
+            broker.close();
         }
 
         return type;
@@ -127,27 +119,46 @@ public class OJBPropertySet extends AbstractPropertySet {
         globalKey = (String) args.get("globalKey");
     }
 
+    public void remove() throws PropertyException {
+        PersistenceBroker broker = null;
+
+        try {
+            broker = this.getBroker();
+
+            Criteria criteria = new Criteria();
+            criteria.addEqualTo("globalKey", globalKey);
+
+            Query query = new QueryByCriteria(OJBPropertySetItem.class, criteria);
+
+            broker.delete(query);
+        } catch (Exception e) {
+            log.error("An exception occured", e);
+
+            throw new PropertyException(e.getMessage());
+        } finally {
+            broker.close();
+        }
+    }
+
     public void remove(String key) throws PropertyException {
         PersistenceBroker broker = null;
 
         try {
             broker = this.getBroker();
 
-            Criteria critere = new Criteria();
-            critere.addEqualTo("globalKey", globalKey);
-            critere.addEqualTo("itemKey", key);
+            Criteria criteria = new Criteria();
+            criteria.addEqualTo("globalKey", globalKey);
+            criteria.addEqualTo("itemKey", key);
 
-            Query requete = new QueryByCriteria(OJBPropertySetItem.class, critere);
+            Query query = new QueryByCriteria(OJBPropertySetItem.class, criteria);
 
-            broker.delete(requete);
+            broker.delete(query);
         } catch (Exception e) {
             log.error("An exception occured", e);
 
             throw new PropertyException(e.getMessage());
         } finally {
-            if (broker != null) {
-                broker.close();
-            }
+            broker.close();
         }
     }
 
@@ -222,9 +233,7 @@ public class OJBPropertySet extends AbstractPropertySet {
 
             throw new PropertyException(e.getMessage());
         } finally {
-            if (broker != null) {
-                broker.close();
-            }
+            broker.close();
         }
     }
 
@@ -235,13 +244,13 @@ public class OJBPropertySet extends AbstractPropertySet {
         try {
             broker = this.getBroker();
 
-            Criteria critere = new Criteria();
-            critere.addEqualTo("globalKey", globalKey);
-            critere.addLike("itemKey", key);
+            Criteria criteria = new Criteria();
+            criteria.addEqualTo("globalKey", globalKey);
+            criteria.addLike("itemKey", key);
 
-            Query requete = new QueryByCriteria(OJBPropertySetItem.class, critere);
+            Query query = new QueryByCriteria(OJBPropertySetItem.class, criteria);
 
-            OJBPropertySetItem item = (OJBPropertySetItem) broker.getObjectByQuery(requete);
+            OJBPropertySetItem item = (OJBPropertySetItem) broker.getObjectByQuery(query);
 
             switch (type) {
             case PropertySet.BOOLEAN:
@@ -291,9 +300,7 @@ public class OJBPropertySet extends AbstractPropertySet {
             log.error("Could not get value for key " + key + " of type " + type, e);
             throw new PropertyException(e.getMessage());
         } finally {
-            if (broker != null) {
-                broker.close();
-            }
+            broker.close();
         }
 
         return value;

@@ -134,6 +134,17 @@ public class OFBizPropertySet extends AbstractPropertySet implements Serializabl
         entityName = (String) args.get("entityName");
     }
 
+    public void remove() throws PropertyException {
+        //hani: todo this needs to be optimised rather badly, but I have no idea how
+        Collection keys = getKeys();
+        Iterator iter = keys.iterator();
+
+        while (iter.hasNext()) {
+            String key = (String) iter.next();
+            remove(key);
+        }
+    }
+
     public void remove(String key) throws PropertyException {
         try {
             // remove actual property

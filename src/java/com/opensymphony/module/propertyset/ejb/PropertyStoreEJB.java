@@ -235,6 +235,31 @@ public class PropertyStoreEJB implements SessionBean {
 
     /**
      * @ejb.interface-method
+     * @ejb.transaction type="Required"
+     */
+    public void removeEntry(String entityName, long entityId) {
+        try {
+            Collection items = entryHome.findByNameAndId(entityName, entityId);
+            Iterator iter = items.iterator();
+
+            while (iter.hasNext()) {
+                PropertyEntryLocal entry = (PropertyEntryLocal) iter.next();
+                entry.remove();
+            }
+        } catch (FinderException e) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Value did not exist anyway.");
+            }
+        } catch (PropertyException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error("Could not remove value.", e);
+            throw new PropertyImplementationException("Could not remove value.", e);
+        }
+    }
+
+    /**
+     * @ejb.interface-method
      */
     public void removeEntry(String entityName, long entityId, String key) {
         if (logger.isDebugEnabled()) {

@@ -187,7 +187,18 @@ public class EJBPropertySet extends AbstractPropertySet implements Serializable 
     }
 
     /**
-    * Proxy to {@link com.opensymphony.module.propertyset.ejb.PropertyStore#remove(java.lang.String,long,java.lang.String)}
+     * Proxy to {@link PropertyStore#removeEntry(String, long, String)}
+     */
+    public void remove() throws PropertyException {
+        try {
+            store.removeEntry(entityName, entityId);
+        } catch (RemoteException re) {
+            throw new PropertyImplementationException(re);
+        }
+    }
+
+    /**
+    * Proxy to {@link PropertyStore#removeEntry(String, long, String)}
     */
     public void remove(String key) throws PropertyException {
         try {

@@ -281,6 +281,12 @@ public interface PropertySet {
     void remove(String key) throws PropertyException;
 
     /**
+     * Remove the propertyset and all it associated keys.
+     * @throws PropertyException if there is an error removing the propertyset.
+     */
+    void remove() throws PropertyException;
+
+    /**
     * Whether this PropertySet implementation allows the type specified
     * to be stored or retrieved.
     */

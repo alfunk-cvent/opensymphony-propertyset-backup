@@ -127,6 +127,10 @@ public class MemoryPropertySet extends AbstractPropertySet {
         getMap().remove(key);
     }
 
+    public void remove() throws PropertyException {
+        map.clear();
+    }
+
     protected synchronized void setImpl(int type, String key, Object value) throws DuplicatePropertyKeyException {
         if (exists(key)) {
             ValueEntry v = (ValueEntry) getMap().get(key);
