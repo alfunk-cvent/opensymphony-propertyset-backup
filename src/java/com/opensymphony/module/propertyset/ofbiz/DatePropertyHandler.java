@@ -23,7 +23,7 @@ public class DatePropertyHandler implements PropertyHandler {
             return input;
         }
 
-        throw new InvalidPropertyTypeException();
+        throw new InvalidPropertyTypeException("Could not recognize date type");
     }
 
     public Object processSet(int type, Object input) throws PropertyException {
@@ -37,7 +37,7 @@ public class DatePropertyHandler implements PropertyHandler {
             }
         }
 
-        throw new InvalidPropertyTypeException();
+        throw new InvalidPropertyTypeException("Cannot set a date type of " + type + " for input: " + input);
     }
 
     // Package protected ---------------------------------------------
