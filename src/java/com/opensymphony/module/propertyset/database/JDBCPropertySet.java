@@ -325,7 +325,7 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
                 case PropertySet.OBJECT:
 
-                    ByteArrayInputStream bis = new ByteArrayInputStream(rs.getBytes(colData));
+                    InputStream bis = rs.getBinaryStream(colData);
 
                     try {
                         ObjectInputStream is = new ObjectInputStream(bis);
