@@ -62,6 +62,8 @@ import com.opensymphony.util.Data;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.*;
+
 import java.sql.*;
 
 import java.util.*;
@@ -138,6 +140,7 @@ public class JDBCPropertySet extends AbstractPropertySet {
     // args
     String globalKey;
     String tableName;
+    private String driverName;
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
@@ -359,6 +362,21 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
                     break;
 
+                case PropertySet.OBJECT:
+
+                    ByteArrayInputStream bis = new ByteArrayInputStream(rs.getBytes(colData));
+
+                    try {
+                        ObjectInputStream is = new ObjectInputStream(bis);
+                        o = is.readObject();
+                    } catch (IOException e) {
+                        throw new PropertyException("Error de-serializing object for key '" + key + "' from store:" + e);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
+
                 case PropertySet.DOUBLE:
                     o = new Double(rs.getDouble(colFloat));
 
@@ -399,12 +417,12 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
     private void setValues(PreparedStatement ps, int type, String key, Object value) throws SQLException, PropertyException {
         // Patched by Edson Richter for MS SQL Server JDBC Support!
-        String driverName;
-
-        try {
-            driverName = ps.getConnection().getMetaData().getDriverName().toUpperCase();
-        } catch (Exception e) {
-            driverName = "";
+        if (driverName == null) {
+            try {
+                this.driverName = ps.getConnection().getMetaData().getDriverName().toUpperCase();
+            } catch (Exception e) {
+                this.driverName = "";
+            }
         }
 
         ps.setNull(1, Types.VARCHAR);
@@ -412,9 +430,9 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
         // Patched by Edson Richter for MS SQL Server JDBC Support!
         // Oracle support suggestion also Michael G. Slack
-        if ((driverName.indexOf("SQLSERVER") >= 0) || (driverName.indexOf("ORACLE") >= 0)) {
+        if ((this.driverName.indexOf("SQLSERVER") >= 0) || (this.driverName.indexOf("ORACLE") >= 0)) {
             ps.setNull(3, Types.BINARY);
-        } else if (driverName.indexOf("SYBASE") >= 0) {
+        } else if (this.driverName.indexOf("SYBASE") >= 0) {
             ps.setNull(3, Types.VARBINARY);
         } else {
             ps.setNull(3, Types.BLOB);
@@ -438,6 +456,24 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
             Data data = (Data) value;
             ps.setBytes(3, data.getBytes());
+
+            break;
+
+        case PropertySet.OBJECT:
+
+            if (!(value instanceof Serializable)) {
+                throw new PropertyException(value.getClass() + " does not implement java.io.Serializable");
+            }
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            try {
+                ObjectOutputStream os = new ObjectOutputStream(bos);
+                os.writeObject(value);
+                ps.setBytes(3, bos.toByteArray());
+            } catch (IOException e) {
+                throw new PropertyException("I/O Error when serializing object:" + e);
+            }
 
             break;
 
