@@ -4,6 +4,7 @@
  */
 package com.opensymphony.module.propertyset;
 
+
 /**
  * Thrown if a property is set who's key matches a key of an
  * existing property with different type.

@@ -4,6 +4,7 @@
  */
 package com.opensymphony.module.propertyset;
 
+
 /**
  * Parent class of all exceptions thrown by PropertySet.
  *

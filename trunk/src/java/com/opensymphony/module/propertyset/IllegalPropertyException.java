@@ -4,6 +4,7 @@
  */
 package com.opensymphony.module.propertyset;
 
+
 /**
  * Thrown if a property is set which is not allowed.
  *

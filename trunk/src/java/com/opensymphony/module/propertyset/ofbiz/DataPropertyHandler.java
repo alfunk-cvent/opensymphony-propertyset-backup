@@ -77,7 +77,14 @@ public class DataPropertyHandler implements PropertyHandler {
                 return (writeXML((Document) input));
 
             case PropertySet.DATA:
-                return (((Data) input).getBytes());
+
+                if (input instanceof Data) {
+                    return (((Data) input).getBytes());
+                } else if (input instanceof byte[]) {
+                    return (byte[]) input;
+                } else {
+                    throw new IllegalPropertyException("DATA is not an instance of Data or byte[].");
+                }
 
             case PropertySet.PROPERTIES:
                 return (writeProperties((Properties) input));

@@ -4,6 +4,7 @@
  */
 package com.opensymphony.module.propertyset;
 
+
 /**
  * Thrown if a property is attempted to be retrieved that
  * does exist but is of different type.

@@ -4,6 +4,7 @@
  */
 package com.opensymphony.module.propertyset;
 
+
 /**
  * Thrown if a specific implementation exception is thrown
  * (such as EJBException, RemoteException, NamingException, IOException, etc).
