@@ -26,10 +26,10 @@
   </target>
 
   <target name="init">
+    <property file="build.properties"/>
     <tstamp>
       <format property="release" pattern="-dMMMyy" locale="en" timezone="GMT"/>
     </tstamp>
-    <property file="build.properties"/>
 
     <property name="lib" value="lib"/>
     <property name="lib.core" value="${lib}/core"/>
