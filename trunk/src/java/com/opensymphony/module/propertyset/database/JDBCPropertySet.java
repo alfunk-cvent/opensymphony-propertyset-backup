@@ -90,6 +90,7 @@ public class JDBCPropertySet extends AbstractPropertySet {
     String globalKey;
     String tableName;
     private String driverName;
+    private String productName;
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
@@ -377,9 +378,10 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
     private void setValues(PreparedStatement ps, int type, String key, Object value) throws SQLException, PropertyException {
         // Patched by Edson Richter for MS SQL Server JDBC Support!
-        if (driverName == null) {
+        if ((driverName == null) || (productName == null)) {
             try {
                 this.driverName = ps.getConnection().getMetaData().getDriverName().toUpperCase();
+                this.productName = ps.getConnection().getMetaData().getDatabaseProductName().toUpperCase();
             } catch (Exception e) {
                 this.driverName = "";
             }
@@ -390,9 +392,9 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
         // Patched by Edson Richter for MS SQL Server JDBC Support!
         // Oracle support suggestion also Michael G. Slack
-        if ((this.driverName.indexOf("SQLSERVER") >= 0) || (this.driverName.indexOf("ORACLE") >= 0)) {
+        if ((this.driverName.indexOf("SQLSERVER") > -1) || (this.driverName.indexOf("ORACLE") > -1)) {
             ps.setNull(3, Types.BINARY);
-        } else if (this.driverName.indexOf("SYBASE") >= 0) {
+        } else if ((this.driverName.indexOf("SYBASE") > -1) || (this.productName.indexOf("SYBASE") > -1)) {
             ps.setNull(3, Types.VARBINARY);
         } else {
             ps.setNull(3, Types.BLOB);
