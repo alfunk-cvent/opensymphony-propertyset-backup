@@ -91,7 +91,6 @@ public class SerializablePropertySet extends MemoryPropertySet implements Serial
     }
 
     public void remove() throws PropertyException {
-        super.remove();
         serialMap.clear();
     }
 
