@@ -58,7 +58,6 @@ package com.opensymphony.module.propertyset.database;
 import com.opensymphony.module.propertyset.*;
 
 import com.opensymphony.util.Data;
-import com.opensymphony.util.EJBUtils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -67,6 +66,9 @@ import java.sql.*;
 
 import java.util.*;
 import java.util.Date;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import javax.sql.DataSource;
 
@@ -220,10 +222,20 @@ public class JDBCPropertySet extends AbstractPropertySet {
         globalKey = (String) args.get("globalKey");
 
         // config
-        try {
-            ds = (DataSource) EJBUtils.lookup((String) config.get("datasource"));
-        } catch (Exception e) {
-            log.fatal("Could not get DataSource", e);
+        String jndi = (String) config.get("datasource");
+
+        if (jndi != null) {
+            try {
+                ds = (DataSource) lookup(jndi);
+
+                if (ds == null) {
+                    ds = (DataSource) new javax.naming.InitialContext().lookup(jndi);
+                }
+            } catch (Exception e) {
+                log.fatal("Error looking up DataSource at " + jndi, e);
+
+                return;
+            }
         }
 
         tableName = (String) config.get("table.name");
@@ -474,6 +486,21 @@ public class JDBCPropertySet extends AbstractPropertySet {
             }
         } catch (SQLException e) {
             log.error("Could not close connection");
+        }
+    }
+
+    private Object lookup(String location) throws NamingException {
+        try {
+            InitialContext context = new InitialContext();
+
+            try {
+                return context.lookup(location);
+            } catch (NamingException e) {
+                //ok, couldn't find it, look in env
+                return context.lookup("java:comp/env/" + location);
+            }
+        } catch (NamingException e) {
+            throw e;
         }
     }
 }
