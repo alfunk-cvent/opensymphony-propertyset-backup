@@ -10,7 +10,6 @@ import junit.framework.Assert;
 
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -39,7 +38,6 @@ public class DatabaseHelper {
     //~ Static fields/initializers /////////////////////////////////////////////
 
     private static Log log = LogFactory.getLog(DatabaseHelper.class);
-    private static boolean databaseBuilt = false;
     private static SessionFactory sessionFactory;
     private static Configuration configuration;
 
@@ -74,19 +72,11 @@ public class DatabaseHelper {
         configuration.addFile(fileHibernatePropertySetItem);
 
 		// Use SchemaExport to see what Hibernate would have created!
-        createDatabase("src/etc/deployment/jdbc/mckoi-hibernate.sql");
+        createDatabase("src/etc/deployment/hibernate/mckoi.sql");
 
         //new SchemaExport(configuration).create(true, true);
         sessionFactory = configuration.buildSessionFactory();
         System.out.println("done");
-    }
-
-    /**
-     * Build the database using a sql script
-     * @throws Exception
-     */
-    public static void exportSchemaForJDBC() throws Exception {
-        createDatabase("src/etc/deployment/jdbc/mckoi.sql");
     }
 
     private static String getDatabaseCreationScript(String scriptFile) throws Exception {
@@ -98,7 +88,7 @@ public class DatabaseHelper {
         return readTextStream(bis);
     }
 
-    private static void createDatabase(String scriptFile) {
+    public static void createDatabase(String scriptFile) {
         Connection connection;
         Statement statement = null;
         String sqlLine = null;
@@ -118,7 +108,7 @@ public class DatabaseHelper {
                 sqlLine = StringUtils.replace(sqlLine, "\n", "");
 
                 //String s = sqls[i];
-                if (sqlLine.length() > 0) {
+                if ((sqlLine.length() > 0) && (sqlLine.charAt(0) != '#')) {
                     try {
                         statement.executeQuery(sqlLine);
                     } catch (MSQLException msqlEx) {
@@ -141,9 +131,6 @@ public class DatabaseHelper {
             }
         }
 
-        databaseBuilt = true;
-
-        //  return connection;
     }
 
     private static String readTextStream(InputStream is) throws Exception {
