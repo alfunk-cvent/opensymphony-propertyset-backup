@@ -51,7 +51,7 @@ public class DefaultHibernateConfigurationProvider implements HibernateConfigura
     public void setupConfiguration(Map configurationProperties) {
         // loaded hibernate config
         try {
-            configuration = new Configuration().addClass(PropertySetItem.class);
+            configuration = new Configuration().addClass(PropertySetItemImpl.class);
 
             Iterator itr = configurationProperties.keySet().iterator();
 
