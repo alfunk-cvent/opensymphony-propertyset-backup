@@ -78,11 +78,13 @@ public class AbstractPropertySetTest extends TestCase {
     }
 
     public void testGetKeysOfType() {
-        ps.setString("test1", "value1");
-        ps.setString("test2", "value2");
-        ps.setInt("testInt", 14);
-        assertEquals(2, ps.getKeys(PropertySet.STRING).size());
-        assertEquals(1, ps.getKeys(PropertySet.INT).size());
+        if (ps.supportsTypes()) {
+            ps.setString("test1", "value1");
+            ps.setString("test2", "value2");
+            ps.setInt("testInt", 14);
+            assertEquals(2, ps.getKeys(PropertySet.STRING).size());
+            assertEquals(1, ps.getKeys(PropertySet.INT).size());
+        }
     }
 
     public void testGetKeysWithPrefix() {
@@ -94,15 +96,17 @@ public class AbstractPropertySetTest extends TestCase {
     }
 
     public void testGetKeysWithPrefixOfType() {
-        ps.setString("test1", "value1");
-        ps.setString("test2", "value2");
-        ps.setString("username", "user1");
-        ps.setInt("testInt", 32);
-        ps.setInt("usernum", 18);
-        assertEquals(2, ps.getKeys("test", PropertySet.STRING).size());
-        assertEquals(1, ps.getKeys("user", PropertySet.STRING).size());
-        assertEquals(1, ps.getKeys("test", PropertySet.INT).size());
-        assertEquals(1, ps.getKeys("user", PropertySet.INT).size());
+        if (ps.supportsTypes()) {
+            ps.setString("test1", "value1");
+            ps.setString("test2", "value2");
+            ps.setString("username", "user1");
+            ps.setInt("testInt", 32);
+            ps.setInt("usernum", 18);
+            assertEquals(2, ps.getKeys("test", PropertySet.STRING).size());
+            assertEquals(1, ps.getKeys("user", PropertySet.STRING).size());
+            assertEquals(1, ps.getKeys("test", PropertySet.INT).size());
+            assertEquals(1, ps.getKeys("user", PropertySet.INT).size());
+        }
     }
 
     public void testGetTypeForBoolean() {
