@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
 <hibernate-mapping>
-    <class name="com.opensymphony.module.propertyset.hibernate.PropertySetItem" table="OS_PROPERTYSET">
+    <class name="com.opensymphony.module.propertyset.hibernate.PropertySetItem" table="OS_PROPERTYENTRY">
         <composite-id>
             <key-property name="entityName" column="entity_name" length="125" />
             <key-property name="entityId" column="entity_id" />

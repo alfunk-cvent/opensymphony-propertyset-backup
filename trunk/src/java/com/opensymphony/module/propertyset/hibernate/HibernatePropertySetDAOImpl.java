@@ -7,7 +7,6 @@ package com.opensymphony.module.propertyset.hibernate;
 import com.opensymphony.module.propertyset.PropertyException;
 
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 
