@@ -6,6 +6,7 @@ package com.opensymphony.module.propertyset.hibernate;
 
 import com.opensymphony.module.propertyset.BasePropertySetTest;
 import com.opensymphony.module.propertyset.DatabaseHelper;
+
 import net.sf.hibernate.cfg.Configuration;
 
 
@@ -30,6 +31,7 @@ public class HibernatePropertySetTest extends BasePropertySetTest {
     public void setUp() throws Exception {
         //DatabaseHelper.exportSchemaForJDBC();
         DatabaseHelper.createDatabase("");
+
         Configuration config = DatabaseHelper.createHibernateConfiguration();
         DefaultHibernateConfigurationProvider configurationProvider = new DefaultHibernateConfigurationProvider();
         configurationProvider.setConfiguration(config);
