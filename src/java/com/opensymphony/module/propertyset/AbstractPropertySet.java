@@ -55,11 +55,10 @@ package com.opensymphony.module.propertyset;
  * SUCH DAMAGE.
  * ====================================================================
  */
-import com.opensymphony.util.Data;
 
+import com.opensymphony.util.Data;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.w3c.dom.Document;
 
 import java.util.*;
@@ -150,55 +149,60 @@ public abstract class AbstractPropertySet implements PropertySet {
         Object value = null;
 
         switch (type) {
-        case BOOLEAN:
-            value = new Boolean(getBoolean(key));
+            case BOOLEAN:
+                value = new Boolean(getBoolean(key));
 
-            break;
+                break;
 
-        case INT:
-            value = new Integer(getInt(key));
+            case INT:
+                value = new Integer(getInt(key));
 
-            break;
+                break;
 
-        case LONG:
-            value = new Long(getLong(key));
+            case LONG:
+                value = new Long(getLong(key));
 
-            break;
+                break;
 
-        case DOUBLE:
-            value = new Double(getDouble(key));
+            case DOUBLE:
+                value = new Double(getDouble(key));
 
-            break;
+                break;
 
-        case STRING:
-            value = getString(key);
+            case STRING:
+                value = getString(key);
 
-            break;
+                break;
 
-        case DATE:
-            value = getDate(key);
+            case TEXT:
+                value = getText(key);
 
-            break;
+                break;
 
-        case XML:
-            value = getXML(key);
+            case DATE:
+                value = getDate(key);
 
-            break;
+                break;
 
-        case DATA:
-            value = getData(key);
+            case XML:
+                value = getXML(key);
 
-            break;
+                break;
 
-        case PROPERTIES:
-            value = getProperties(key);
+            case DATA:
+                value = getData(key);
 
-            break;
+                break;
 
-        case OBJECT:
-            value = getObject(key);
+            case PROPERTIES:
+                value = getProperties(key);
 
-            break;
+                break;
+
+            case OBJECT:
+                value = getObject(key);
+
+                break;
         }
 
         return value;
@@ -217,15 +221,15 @@ public abstract class AbstractPropertySet implements PropertySet {
     }
 
     /**
-    * Constructs {@link com.opensymphony.util.Data} wrapper around bytes.
-    */
+     * Constructs {@link com.opensymphony.util.Data} wrapper around bytes.
+     */
     public void setData(String key, byte[] value) {
         set(DATA, key, new Data(value));
     }
 
     /**
-    * Casts to {@link com.opensymphony.util.Data} and returns bytes.
-    */
+     * Casts to {@link com.opensymphony.util.Data} and returns bytes.
+     */
     public byte[] getData(String key) {
         try {
             Object data = get(DATA, key);
@@ -281,22 +285,22 @@ public abstract class AbstractPropertySet implements PropertySet {
     }
 
     /**
-    * Calls <code>getKeys(null,0)</code>
-    */
+     * Calls <code>getKeys(null,0)</code>
+     */
     public Collection getKeys() throws PropertyException {
         return getKeys(null, 0);
     }
 
     /**
-    * Calls <code>getKeys(null,type)</code>
-    */
+     * Calls <code>getKeys(null,type)</code>
+     */
     public Collection getKeys(int type) throws PropertyException {
         return getKeys(null, type);
     }
 
     /**
-    * Calls <code>getKeys(prefix,0)</code>
-    */
+     * Calls <code>getKeys(prefix,0)</code>
+     */
     public Collection getKeys(String prefix) throws PropertyException {
         return getKeys(prefix, 0);
     }
@@ -346,15 +350,15 @@ public abstract class AbstractPropertySet implements PropertySet {
     }
 
     /**
-    * Returns true.
-    */
+     * Returns true.
+     */
     public boolean isSettable(String property) {
         return true;
     }
 
     /**
-    * Throws IllegalPropertyException if value length greater than 255.
-    */
+     * Throws IllegalPropertyException if value length greater than 255.
+     */
     public void setString(String key, String value) {
         if ((value != null) && (value.length() > 255)) {
             throw new IllegalPropertyException("String exceeds 255 characters.");
@@ -400,22 +404,22 @@ public abstract class AbstractPropertySet implements PropertySet {
     }
 
     /**
-    * Returns true.
-    */
+     * Returns true.
+     */
     public boolean supportsType(int type) {
         return true;
     }
 
     /**
-    * Returns true.
-    */
+     * Returns true.
+     */
     public boolean supportsTypes() {
         return true;
     }
 
     /**
-    * Simple human readable representation of contents of PropertySet.
-    */
+     * Simple human readable representation of contents of PropertySet.
+     */
     public String toString() {
         StringBuffer result = new StringBuffer();
         result.append(getClass().getName());
@@ -451,41 +455,41 @@ public abstract class AbstractPropertySet implements PropertySet {
 
     protected String type(int type) {
         switch (type) {
-        case PropertySet.BOOLEAN:
-            return "boolean";
+            case PropertySet.BOOLEAN:
+                return "boolean";
 
-        case PropertySet.INT:
-            return "int";
+            case PropertySet.INT:
+                return "int";
 
-        case PropertySet.LONG:
-            return "long";
+            case PropertySet.LONG:
+                return "long";
 
-        case PropertySet.DOUBLE:
-            return "double";
+            case PropertySet.DOUBLE:
+                return "double";
 
-        case PropertySet.STRING:
-            return "string";
+            case PropertySet.STRING:
+                return "string";
 
-        case PropertySet.TEXT:
-            return "text";
+            case PropertySet.TEXT:
+                return "text";
 
-        case PropertySet.DATE:
-            return "date";
+            case PropertySet.DATE:
+                return "date";
 
-        case PropertySet.OBJECT:
-            return "object";
+            case PropertySet.OBJECT:
+                return "object";
 
-        case PropertySet.XML:
-            return "xml";
+            case PropertySet.XML:
+                return "xml";
 
-        case PropertySet.DATA:
-            return "data";
+            case PropertySet.DATA:
+                return "data";
 
-        case PropertySet.PROPERTIES:
-            return "properties";
+            case PropertySet.PROPERTIES:
+                return "properties";
 
-        default:
-            return null;
+            default:
+                return null;
         }
     }
 
