@@ -4,136 +4,54 @@
  */
 package com.opensymphony.module.propertyset.hibernate;
 
-import java.io.Serializable;
-
 import java.util.Date;
 
 
 /**
- *
- *
- * @author $Author$
+ * Interface to be implemented by the concrete class that hibernate persists.
+ * @author $author$
  * @version $Revision$
  */
-public class PropertySetItem implements Serializable {
-    //~ Instance fields ////////////////////////////////////////////////////////
-
-    Date dateVal;
-    String entityName;
-    String key;
-    String stringVal;
-    boolean booleanVal;
-    double doubleVal;
-    int intVal;
-    int type;
-    long entityId;
-    long longVal;
-
-    //~ Constructors ///////////////////////////////////////////////////////////
-
-    //needed for hibernate
-    public PropertySetItem() {
-    }
-
-    public PropertySetItem(String entityName, long entityId, String key) {
-        this.entityName = entityName;
-        this.entityId = entityId;
-        this.key = key;
-    }
-
+public interface PropertySetItem {
     //~ Methods ////////////////////////////////////////////////////////////////
 
-    public void setBooleanVal(boolean booleanVal) {
-        this.booleanVal = booleanVal;
-    }
+    void setBooleanVal(boolean booleanVal);
 
-    public boolean getBooleanVal() {
-        return booleanVal;
-    }
+    boolean getBooleanVal();
 
-    public void setDateVal(Date dateVal) {
-        this.dateVal = dateVal;
-    }
+    void setDateVal(Date dateVal);
 
-    public Date getDateVal() {
-        return dateVal;
-    }
+    Date getDateVal();
 
-    public void setDoubleVal(double doubleVal) {
-        this.doubleVal = doubleVal;
-    }
+    void setDoubleVal(double doubleVal);
 
-    public double getDoubleVal() {
-        return doubleVal;
-    }
+    double getDoubleVal();
 
-    public void setEntityId(long entityId) {
-        this.entityId = entityId;
-    }
+    void setEntityId(long entityId);
 
-    public long getEntityId() {
-        return entityId;
-    }
+    long getEntityId();
 
-    public void setEntityName(String entityName) {
-        this.entityName = entityName;
-    }
+    void setEntityName(String entityName);
 
-    public String getEntityName() {
-        return entityName;
-    }
+    String getEntityName();
 
-    public void setIntVal(int intVal) {
-        this.intVal = intVal;
-    }
+    void setIntVal(int intVal);
 
-    public int getIntVal() {
-        return intVal;
-    }
+    int getIntVal();
 
-    public void setKey(String key) {
-        this.key = key;
-    }
+    void setKey(String key);
 
-    public String getKey() {
-        return key;
-    }
+    String getKey();
 
-    public void setLongVal(long longVal) {
-        this.longVal = longVal;
-    }
+    void setLongVal(long longVal);
 
-    public long getLongVal() {
-        return longVal;
-    }
+    long getLongVal();
 
-    public void setStringVal(String stringVal) {
-        this.stringVal = stringVal;
-    }
+    void setStringVal(String stringVal);
 
-    public String getStringVal() {
-        return stringVal;
-    }
+    String getStringVal();
 
-    public void setType(int type) {
-        this.type = type;
-    }
+    void setType(int type);
 
-    public int getType() {
-        return type;
-    }
-
-    public boolean equals(Object obj) {
-        if (!(obj instanceof PropertySetItem)) {
-            return false;
-        }
-
-        PropertySetItem item = (PropertySetItem) obj;
-
-        return ((item.getEntityId() == entityId) && item.getEntityName().equals(entityName) && item.getKey().equals(key));
-    }
-
-    public int hashCode() {
-        return (int) (entityId + entityName.hashCode() + key.hashCode());
-    }
+    int getType();
 }

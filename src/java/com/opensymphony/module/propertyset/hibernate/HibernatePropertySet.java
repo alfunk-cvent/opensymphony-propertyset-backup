@@ -124,7 +124,7 @@ public class HibernatePropertySet extends AbstractPropertySet {
 
         if (item == null) {
             update = false;
-            item = new PropertySetItem(entityName, entityId.longValue(), key);
+            item = configProvider.getPropertySetDAO().create(entityName, entityId.longValue(), key);
         } else if (item.getType() != type) {
             throw new PropertyException("Existing key '" + key + "' does not have matching type of " + type);
         }

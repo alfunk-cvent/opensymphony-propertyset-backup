@@ -83,6 +83,10 @@ public class HibernatePropertySetDAOImpl implements HibernatePropertySetDAO {
         return list;
     }
 
+    public PropertySetItem create(String entityName, long entityId, String key) {
+        return new PropertySetItemImpl(entityName, entityId, key);
+    }
+
     public PropertySetItem findByKey(String entityName, Long entityId, String key) {
         Session session = null;
         PropertySetItem item = null;
