@@ -9,9 +9,6 @@ import com.opensymphony.module.propertyset.*;
 import com.opensymphony.util.DataUtil;
 import com.opensymphony.util.EJBUtils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.Serializable;
 
 import java.rmi.RemoteException;
@@ -68,10 +65,6 @@ import javax.naming.NamingException;
  * @see com.opensymphony.module.propertyset.ejb.PropertyStoreHome
  */
 public class EJBPropertySet extends AbstractPropertySet implements Serializable {
-    //~ Static fields/initializers /////////////////////////////////////////////
-
-    private static final Log logger = LogFactory.getLog(EJBPropertySet.class);
-
     //~ Instance fields ////////////////////////////////////////////////////////
 
     private PropertyStore store;
@@ -164,7 +157,6 @@ public class EJBPropertySet extends AbstractPropertySet implements Serializable 
         try {
             store.set(entityName, entityId, type, key, (Serializable) value);
         } catch (RemoteException re) {
-            logger.error("RemoteExecption while setting property", re);
             throw new PropertyImplementationException(re);
         }
     }
