@@ -90,6 +90,11 @@ public class SerializablePropertySet extends MemoryPropertySet implements Serial
         serialMap = new HashMap();
     }
 
+    public void remove() throws PropertyException {
+        super.remove();
+        serialMap.clear();
+    }
+
     protected synchronized void setImpl(int type, String key, Object value) throws IllegalPropertyException, DuplicatePropertyKeyException {
         if ((value != null) && !(value instanceof Serializable)) {
             throw new IllegalPropertyException("Cannot set " + key + ". Value type " + value.getClass() + " not Serializable");

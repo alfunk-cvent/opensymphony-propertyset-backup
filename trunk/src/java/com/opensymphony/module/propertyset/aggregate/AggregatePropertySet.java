@@ -11,8 +11,9 @@ import org.apache.commons.logging.LogFactory;
 
 import org.w3c.dom.Document;
 
-import java.util.*;
 import java.io.Serializable;
+
+import java.util.*;
 
 
 /**
@@ -129,6 +130,17 @@ public class AggregatePropertySet extends AbstractPropertySet implements Seriali
 
         if (propertySets == null) {
             propertySets = new ArrayList();
+        }
+    }
+
+    public void remove() throws PropertyException {
+        if (propertySets != null) {
+            Iterator iter = propertySets.iterator();
+
+            while (iter.hasNext()) {
+                PropertySet ps = (PropertySet) iter.next();
+                ps.remove();
+            }
         }
     }
 

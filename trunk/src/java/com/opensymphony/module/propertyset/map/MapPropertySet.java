@@ -56,6 +56,7 @@ package com.opensymphony.module.propertyset.map;
  * ====================================================================
  */
 import com.opensymphony.module.propertyset.AbstractPropertySet;
+import com.opensymphony.module.propertyset.PropertyException;
 
 import java.util.*;
 
@@ -148,6 +149,10 @@ public class MapPropertySet extends AbstractPropertySet {
 
     public synchronized void remove(String key) {
         map.remove(key);
+    }
+
+    public void remove() throws PropertyException {
+        map.clear();
     }
 
     /**

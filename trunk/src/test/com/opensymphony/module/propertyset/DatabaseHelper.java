@@ -57,37 +57,6 @@ public class DatabaseHelper {
         return sessionFactory;
     }
 
-    /**
-     * Use the default Hibernate *.hbm.xml files.  These build the primary keys
-     * based on an identity or sequence, whatever is native to the database.
-     * @throws Exception
-     */
-    public static void exportSchemaForHibernate() throws Exception {
-        configuration = new Configuration();
-
-        //cfg.addClass(HibernateHistoryStep.class);
-        File fileHibernatePropertySetItem = new File("src/java/com/opensymphony/module/propertyset/hibernate/PropertySetItem.hbm.xml");
-
-        Assert.assertTrue(fileHibernatePropertySetItem.exists());
-        configuration.addFile(fileHibernatePropertySetItem);
-
-		// Use SchemaExport to see what Hibernate would have created!
-        createDatabase("src/etc/deployment/hibernate/mckoi.sql");
-
-        //new SchemaExport(configuration).create(true, true);
-        sessionFactory = configuration.buildSessionFactory();
-        System.out.println("done");
-    }
-
-    private static String getDatabaseCreationScript(String scriptFile) throws Exception {
-        File file = new File(scriptFile);
-        Assert.assertTrue(file.exists());
-
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-
-        return readTextStream(bis);
-    }
-
     public static void createDatabase(String scriptFile) {
         Connection connection;
         Statement statement = null;
@@ -130,7 +99,37 @@ public class DatabaseHelper {
                 }
             }
         }
+    }
 
+    /**
+     * Use the default Hibernate *.hbm.xml files.  These build the primary keys
+     * based on an identity or sequence, whatever is native to the database.
+     * @throws Exception
+     */
+    public static void exportSchemaForHibernate() throws Exception {
+        configuration = new Configuration();
+
+        //cfg.addClass(HibernateHistoryStep.class);
+        File fileHibernatePropertySetItem = new File("src/java/com/opensymphony/module/propertyset/hibernate/PropertySetItem.hbm.xml");
+
+        Assert.assertTrue(fileHibernatePropertySetItem.exists());
+        configuration.addFile(fileHibernatePropertySetItem);
+
+        // Use SchemaExport to see what Hibernate would have created!
+        createDatabase("src/etc/deployment/hibernate/mckoi.sql");
+
+        //new SchemaExport(configuration).create(true, true);
+        sessionFactory = configuration.buildSessionFactory();
+        System.out.println("done");
+    }
+
+    private static String getDatabaseCreationScript(String scriptFile) throws Exception {
+        File file = new File(scriptFile);
+        Assert.assertTrue(file.exists());
+
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+
+        return readTextStream(bis);
     }
 
     private static String readTextStream(InputStream is) throws Exception {

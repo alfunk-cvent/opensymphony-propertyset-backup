@@ -10,9 +10,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -105,6 +103,38 @@ public class HibernatePropertySetDAOImpl implements HibernatePropertySetDAO {
         }
 
         return item;
+    }
+
+    public void remove(String entityName, Long entityId) {
+        Session session = null;
+
+        try {
+            session = this.sessionFactory.openSession();
+
+            //hani: todo this needs to be optimised rather badly, but I have no idea how
+            Collection keys = getKeys(entityName, entityId, null, 0);
+            Iterator iter = keys.iterator();
+
+            while (iter.hasNext()) {
+                String key = (String) iter.next();
+                session.delete(HibernatePropertySetDAOUtils.getItem(session, entityName, entityId, key));
+            }
+
+            session.flush();
+        } catch (HibernateException e) {
+            throw new PropertyException("Could not remove all keys: " + e.getMessage());
+        } finally {
+            try {
+                if (session != null) {
+                    if (!session.connection().getAutoCommit()) {
+                        session.connection().commit();
+                    }
+
+                    session.close();
+                }
+            } catch (Exception e) {
+            }
+        }
     }
 
     public void remove(String entityName, Long entityId, String key) {

@@ -237,6 +237,24 @@ public class JDBCPropertySet extends AbstractPropertySet {
         colNumber = (String) config.get("col.number");
     }
 
+    public void remove() throws PropertyException {
+        Connection conn = null;
+
+        try {
+            conn = ds.getConnection();
+
+            String sql = "DELETE FROM " + tableName + " WHERE " + colGlobalKey + " = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, globalKey);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            throw new PropertyException(e.getMessage());
+        } finally {
+            closeConnection(conn);
+        }
+    }
+
     public void remove(String key) throws PropertyException {
         Connection conn = null;
 
