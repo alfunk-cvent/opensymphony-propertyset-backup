@@ -23,5 +23,6 @@
         <arg name="hibernate.connection.datasource" value="jdbs/DefautDS" />
         <arg name="hibernate.dialect" value="net.sf.hibernate.dialect.HSQLDialect" />
     </propertyset>
-    <propertyset name="xml" class="com.opensymphony.module.propertyset.xml.XMLPropertySet"/>
+  <propertyset name="ojb" class="com.opensymphony.module.propertyset.ojb.OJBPropertySet"/>
+  <propertyset name="xml" class="com.opensymphony.module.propertyset.xml.XMLPropertySet"/>
 </propertysets>
