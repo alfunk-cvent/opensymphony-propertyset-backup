@@ -59,8 +59,6 @@ CREATE UNIQUE INDEX os_PropertyEntry_allidx ON os_PropertyEntry( entityName, ent
 
 </p>
 
-  <%@ include file="navpanel.jsp" %>
-
 </body>
 
 </html>
