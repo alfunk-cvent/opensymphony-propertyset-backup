@@ -453,9 +453,14 @@ public class JDBCPropertySet extends AbstractPropertySet {
             break;
 
         case PropertySet.DATA:
+                if (value instanceof Data) {
+                    Data data = (Data) value;
+                    ps.setBytes(3, data.getBytes());
+                }
 
-            Data data = (Data) value;
-            ps.setBytes(3, data.getBytes());
+                if (value instanceof byte[]) {
+                    ps.setBytes(3, (byte[]) value);
+                }
 
             break;
 
@@ -539,4 +544,15 @@ public class JDBCPropertySet extends AbstractPropertySet {
             throw e;
         }
     }
+
+    public boolean supportsType(int type) {
+        switch(type) {
+            case PropertySet.PROPERTIES:
+            case PropertySet.TEXT:
+            case PropertySet.XML:
+                return false;
+        }
+        return true;
+    }
+
 }

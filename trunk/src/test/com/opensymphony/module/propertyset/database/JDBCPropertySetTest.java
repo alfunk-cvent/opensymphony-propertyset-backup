@@ -4,8 +4,11 @@
  */
 package com.opensymphony.module.propertyset.database;
 
-import com.opensymphony.module.propertyset.BasePropertySetTest;
+import com.opensymphony.module.propertyset.AbstractPropertySetTest;
 import com.opensymphony.module.propertyset.DatabaseHelper;
+import com.opensymphony.module.propertyset.PropertySetManager;
+
+import java.util.HashMap;
 
 
 /**
@@ -15,22 +18,13 @@ import com.opensymphony.module.propertyset.DatabaseHelper;
  *
  * @author Eric Pugh (epugh@upstate.com)
  */
-public class JDBCPropertySetTest extends BasePropertySetTest {
-    //~ Constructors ///////////////////////////////////////////////////////////
-
-    public JDBCPropertySetTest(String s) {
-        super(s);
-    }
-
-    //~ Methods ////////////////////////////////////////////////////////////////
-
-    public String getType() {
-        return "jdbc";
-    }
+public class JDBCPropertySetTest extends AbstractPropertySetTest {
 
     public void setUp() throws Exception {
-        DatabaseHelper.createDatabase(getClass().getResource("/mckoi.sql"));
-        args.put("globalKey", "test");
         super.setUp();
+        DatabaseHelper.createDatabase(getClass().getResource("/mckoi.sql"));
+        HashMap args = new HashMap();
+        args.put("globalKey", "test");
+        ps = PropertySetManager.getInstance("jdbc", args);
     }
 }

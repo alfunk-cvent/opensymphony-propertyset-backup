@@ -5,17 +5,13 @@
 package com.opensymphony.module.propertyset;
 
 import com.opensymphony.util.XMLUtils;
-
 import junit.framework.TestCase;
-
 import org.w3c.dom.Document;
 
-import java.io.Serializable;
-
+import javax.xml.parsers.ParserConfigurationException;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Properties;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 
 /**
@@ -227,9 +223,10 @@ public class AbstractPropertySetTest extends TestCase {
 
     public void testSetAsActualTypeGetAsActualTypeForDate() {
         if (ps.supportsType(PropertySet.DATE)) {
+            DateFormat df = DateFormat.getInstance();
             Date now = new Date();
             ps.setAsActualType("testDate", now);
-            assertEquals(now, ps.getAsActualType("testDate"));
+            assertEquals(df.format(now), df.format(ps.getAsActualType("testDate")));
         }
     }
 
@@ -313,11 +310,12 @@ public class AbstractPropertySetTest extends TestCase {
 
     public void testSetDateGetDate() {
         if (ps.supportsType(PropertySet.DATE)) {
+            DateFormat df = DateFormat.getInstance();
             Date now = new Date();
             ps.setDate("testDate", now);
-            assertEquals(now, ps.getDate("testDate"));
+            assertEquals(df.format(now), df.format(ps.getDate("testDate")));
             ps.setDate("testDate", new Date());
-            assertEquals(now, ps.getDate("testDate"));
+            assertEquals(df.format(now), df.format(ps.getDate("testDate")));
         }
     }
 
@@ -401,13 +399,4 @@ public class AbstractPropertySetTest extends TestCase {
         }
     }
 
-    //~ Inner Classes //////////////////////////////////////////////////////////
-
-    class TestObject implements Serializable {
-        private long id;
-
-        public TestObject(long id) {
-            this.id = id;
-        }
-    }
 }
