@@ -402,6 +402,8 @@ public class JDBCPropertySet extends AbstractPropertySet {
         // Oracle support suggestion also Michael G. Slack
         if ((driverName.indexOf("SQLSERVER") >= 0) || (driverName.indexOf("ORACLE") >= 0)) {
             ps.setNull(3, Types.BINARY);
+        } else if (driverName.indexOf("SYBASE") >= 0) {
+            ps.setNull(3, Types.VARBINARY);
         } else {
             ps.setNull(3, Types.BLOB);
         }
