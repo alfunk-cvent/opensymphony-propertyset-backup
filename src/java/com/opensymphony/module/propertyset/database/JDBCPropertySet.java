@@ -89,6 +89,7 @@ public class JDBCPropertySet extends AbstractPropertySet {
     // args
     protected String globalKey;
     protected String tableName;
+    protected boolean closeConnWhenDone = false;
     private String driverName;
     private String productName;
 
@@ -100,11 +101,12 @@ public class JDBCPropertySet extends AbstractPropertySet {
         }
 
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            conn = ds.getConnection();
+            conn = getConnection();
 
-            PreparedStatement ps = null;
             String sql = "SELECT " + colItemKey + " FROM " + tableName + " WHERE " + colItemKey + " LIKE ? AND " + colGlobalKey + " = ?";
 
             if (type == 0) {
@@ -120,49 +122,46 @@ public class JDBCPropertySet extends AbstractPropertySet {
             }
 
             ArrayList list = new ArrayList();
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 list.add(rs.getString(colItemKey));
             }
 
-            rs.close();
-            ps.close();
-
             return list;
         } catch (SQLException e) {
             throw new PropertyException(e.getMessage());
         } finally {
-            closeConnection(conn);
+            cleanup(conn, ps, rs);
         }
     }
 
     public int getType(String key) throws PropertyException {
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            conn = ds.getConnection();
+            conn = getConnection();
 
             String sql = "SELECT " + colItemType + " FROM " + tableName + " WHERE " + colGlobalKey + " = ? AND " + colItemKey + " = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, globalKey);
             ps.setString(2, key);
 
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
+
             int type = 0;
 
             if (rs.next()) {
                 type = rs.getInt(colItemType);
             }
 
-            rs.close();
-            ps.close();
-
             return type;
         } catch (SQLException e) {
             throw new PropertyException(e.getMessage());
         } finally {
-            closeConnection(conn);
+            cleanup(conn, ps, rs);
         }
     }
 
@@ -204,38 +203,38 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
     public void remove() throws PropertyException {
         Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
-            conn = ds.getConnection();
+            conn = getConnection();
 
             String sql = "DELETE FROM " + tableName + " WHERE " + colGlobalKey + " = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, globalKey);
             ps.executeUpdate();
-            ps.close();
         } catch (SQLException e) {
             throw new PropertyException(e.getMessage());
         } finally {
-            closeConnection(conn);
+            cleanup(conn, ps, null);
         }
     }
 
     public void remove(String key) throws PropertyException {
         Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
-            conn = ds.getConnection();
+            conn = getConnection();
 
             String sql = "DELETE FROM " + tableName + " WHERE " + colGlobalKey + " = ? AND " + colItemKey + " = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, globalKey);
             ps.setString(2, key);
             ps.executeUpdate();
-            ps.close();
         } catch (SQLException e) {
             throw new PropertyException(e.getMessage());
         } finally {
-            closeConnection(conn);
+            cleanup(conn, ps, null);
         }
     }
 
@@ -250,18 +249,25 @@ public class JDBCPropertySet extends AbstractPropertySet {
         return true;
     }
 
+    protected Connection getConnection() throws SQLException {
+        closeConnWhenDone = true;
+
+        return ds.getConnection();
+    }
+
     protected void setImpl(int type, String key, Object value) throws PropertyException {
         if (value == null) {
             throw new PropertyException("JDBCPropertySet does not allow for null values to be stored");
         }
 
         Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
-            conn = ds.getConnection();
+            conn = getConnection();
 
             String sql = "UPDATE " + tableName + " SET " + colString + " = ?, " + colDate + " = ?, " + colData + " = ?, " + colFloat + " = ?, " + colNumber + " = ?, " + colItemType + " = ? " + " WHERE " + colGlobalKey + " = ? AND " + colItemKey + " = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             setValues(ps, type, key, value);
 
             int rows = ps.executeUpdate();
@@ -273,12 +279,37 @@ public class JDBCPropertySet extends AbstractPropertySet {
                 ps = conn.prepareStatement(sql);
                 setValues(ps, type, key, value);
                 ps.executeUpdate();
-                ps.close();
             }
         } catch (SQLException e) {
             throw new PropertyException(e.getMessage());
         } finally {
-            closeConnection(conn);
+            cleanup(conn, ps, null);
+        }
+    }
+
+    protected void cleanup(Connection connection, Statement statement, ResultSet result) {
+        if (result != null) {
+            try {
+                result.close();
+            } catch (SQLException ex) {
+                log.error("Error closing resultset", ex);
+            }
+        }
+
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException ex) {
+                log.error("Error closing statement", ex);
+            }
+        }
+
+        if ((connection != null) && closeConnWhenDone) {
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                log.error("Error closing connection", ex);
+            }
         }
     }
 
@@ -287,16 +318,18 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
         Object o = null;
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
-            conn = ds.getConnection();
+            conn = getConnection();
 
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, key);
             ps.setString(2, globalKey);
 
             int propertyType;
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             if (rs.next()) {
                 propertyType = rs.getInt(colItemType);
@@ -362,15 +395,12 @@ public class JDBCPropertySet extends AbstractPropertySet {
                     throw new InvalidPropertyTypeException("JDBCPropertySet doesn't support this type yet.");
                 }
             }
-
-            rs.close();
-            ps.close();
         } catch (SQLException e) {
             throw new PropertyException(e.getMessage());
         } catch (NumberFormatException e) {
             throw new PropertyException(e.getMessage());
         } finally {
-            closeConnection(conn);
+            cleanup(conn, ps, rs);
         }
 
         return o;
@@ -480,16 +510,6 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
         default:
             throw new PropertyException("This type isn't supported!");
-        }
-    }
-
-    private void closeConnection(Connection conn) {
-        try {
-            if ((conn != null) && !conn.isClosed()) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            log.error("Could not close connection");
         }
     }
 
