@@ -7,24 +7,13 @@ package com.opensymphony.module.propertyset.hibernate;
 import com.opensymphony.module.propertyset.AbstractPropertySet;
 import com.opensymphony.module.propertyset.PropertyException;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.type.Type;
+import com.opensymphony.util.ClassLoaderUtil;
 
-import java.io.Serializable;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import java.sql.SQLException;
-
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 
@@ -38,7 +27,7 @@ import java.util.Map;
  *  <li><b>entityName</b> - String that holds the name of this entity type</li>
  * </ul>
  *
- * if "<b>sessionFactory</b> - hibornate sessionFactory" is not passed as an arg then init will use: <br />
+ * if "<b>sessionFactory</b> - hibernate sessionFactory" is not passed as an arg then init will use: <br />
  *  <b>hibernate.*</b> - config params needed to create a hibernate sessionFactory in the propertyset config xml.
  * <br />
  * This can be any of the configs avail from hibernate.
@@ -48,53 +37,20 @@ import java.util.Map;
  * @version $Revision$
  */
 public class HibernatePropertySet extends AbstractPropertySet {
+    //~ Static fields/initializers /////////////////////////////////////////////
+
+    protected static Log log = LogFactory.getLog(HibernatePropertySet.class.getName());
+
     //~ Instance fields ////////////////////////////////////////////////////////
 
+    private HibernateConfigurationProvider configProvider;
     private Long entityId;
-    private SessionFactory sessionFactory;
     private String entityName;
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
     public Collection getKeys(String prefix, int type) throws PropertyException {
-        Session session = null;
-        Query query = null;
-        List list = null;
-
-        try {
-            session = this.sessionFactory.openSession();
-
-            if ((prefix != null) && (type > 0)) {
-                query = session.getNamedQuery("all_keys_with_type_like");
-                query.setString("like", prefix + '%');
-                query.setInteger("type", type);
-            } else if (prefix != null) {
-                query = session.getNamedQuery("all_keys_like");
-                query.setString("like", prefix + '%');
-            } else if (type > 0) {
-                query = session.getNamedQuery("all_keys_with_type");
-                query.setInteger("type", type);
-            } else {
-                query = session.getNamedQuery("all_keys");
-            }
-
-            query.setString("entityName", entityName);
-            query.setLong("entityId", entityId.longValue());
-
-            list = query.list();
-        } catch (HibernateException e) {
-            list = Collections.EMPTY_LIST;
-        } finally {
-            try {
-                if (session != null) {
-                    session.flush();
-                    session.close();
-                }
-            } catch (Exception e) {
-            }
-        }
-
-        return list;
+        return configProvider.getPropertySetDAO().getKeys(entityName, entityId, prefix, type);
     }
 
     public int getType(String key) throws PropertyException {
@@ -115,53 +71,48 @@ public class HibernatePropertySet extends AbstractPropertySet {
         super.init(config, args);
         this.entityId = (Long) args.get("entityId");
         this.entityName = (String) args.get("entityName");
-        this.sessionFactory = (SessionFactory) args.get("sessionFactory");
 
-        if (this.sessionFactory == null) {
-            // loaded hibernate config
-            try {
-                Configuration cfg = new Configuration().addClass(PropertySetItem.class);
-                Iterator itr = config.keySet().iterator();
+        // first let's see if we got given a configuration provider to use already
+        configProvider = (HibernateConfigurationProvider) args.get("configurationProvider");
 
-                while (itr.hasNext()) {
-                    String key = (String) itr.next();
+        if (configProvider == null) // if we did not get given one in the args, we need to set a config provider up
+         {
+            // lets see if we need to use a configurationProvider from a class
+            String configProviderClass = (String) config.get("configuration.provider.class");
 
-                    if (key.startsWith("hibernate")) {
-                        cfg.setProperty(key, (String) args.get(key));
-                    }
+            if (configProviderClass != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Setting up property set provider of class: " + configProviderClass);
                 }
 
-                this.sessionFactory = cfg.buildSessionFactory();
-            } catch (HibernateException e) {
+                try {
+                    configProvider = (HibernateConfigurationProvider) ClassLoaderUtil.loadClass(configProviderClass, this.getClass()).newInstance();
+                } catch (Exception e) {
+                    log.error("Unable to load configuration provider class: " + configProviderClass, e);
+
+                    return;
+                }
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("Setting up property set with DefaultHibernateConfigurationProvider");
+                }
+
+                configProvider = new DefaultHibernateConfigurationProvider();
+            }
+
+            configProvider.setupConfiguration(config);
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Setting up property set with hibernate provider passed in args.");
             }
         }
     }
 
     public void remove(String key) throws PropertyException {
-        Session session = null;
-
-        try {
-            session = this.sessionFactory.openSession();
-            session.delete(findByKey(key));
-            session.flush();
-        } catch (HibernateException e) {
-            throw new PropertyException("Could not remove key '" + key + "': " + e.getMessage());
-        } finally {
-            try {
-                if (session != null) {
-                    if (!session.connection().getAutoCommit()) {
-                        session.connection().commit();
-                    }
-
-                    session.close();
-                }
-            } catch (Exception e) {
-            }
-        }
+        configProvider.getPropertySetDAO().remove(entityName, entityId, key);
     }
 
     protected void setImpl(int type, String key, Object value) throws PropertyException {
-        Session session = null;
         PropertySetItem item = new PropertySetItem(entityName, entityId.longValue(), key);
 
         switch (type) {
@@ -200,26 +151,9 @@ public class HibernatePropertySet extends AbstractPropertySet {
             throw new PropertyException("type " + type + " not supported");
         }
 
-        try {
-            item.setType(type);
-            session = this.sessionFactory.openSession();
+        item.setType(type);
 
-            Serializable foo = session.save(item);
-            session.flush();
-        } catch (HibernateException he) {
-            throw new PropertyException("Could not save key '" + key + "':" + he.getMessage());
-        } finally {
-            try {
-                if (session != null) {
-                    if (!session.connection().getAutoCommit()) {
-                        session.connection().commit();
-                    }
-
-                    session.close();
-                }
-            } catch (Exception e) {
-            }
-        }
+        configProvider.getPropertySetDAO().setImpl(item);
     }
 
     protected Object get(int type, String key) throws PropertyException {
@@ -254,23 +188,7 @@ public class HibernatePropertySet extends AbstractPropertySet {
     }
 
     private PropertySetItem findByKey(String key) throws PropertyException {
-        Session session = null;
-        PropertySetItem item = null;
-
-        try {
-            session = this.sessionFactory.openSession();
-            item = (PropertySetItem) session.load(PropertySetItem.class, new PropertySetItem(entityName, entityId.longValue(), key));
-            session.flush();
-        } catch (HibernateException e) {
-            throw new PropertyException("Could not find key '" + key + "': " + e.getMessage());
-        } finally {
-            try {
-                if (session != null) {
-                    session.close();
-                }
-            } catch (Exception e) {
-            }
-        }
+        PropertySetItem item = configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
 
         if (item != null) {
             return item;
