@@ -116,12 +116,9 @@ public class HibernatePropertySet extends AbstractPropertySet {
         PropertySetItem item = configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
 
         if (item == null) {
-            System.out.println("Could not find item with key " + key + " hence creating new...");
             item = new PropertySetItem(entityName, entityId.longValue(), key);
         } else if (item.getType() != type) {
             throw new PropertyException("Existing key '" + key + "' does not have matching type of " + type);
-        } else {
-            System.out.println("Found item with key " + key);
         }
 
         switch (type) {
