@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * <b>Required Args</b>
  * <ul>
- *  <li><b>entityId</b> - Long that holds the ID of this entity</li>
+ *  <li><b>entityId</b> - Long that holds the ID of this entity.</li>
  *  <li><b>entityName</b> - String that holds the name of this entity type</li>
  * </ul>
  *
@@ -113,7 +113,18 @@ public class HibernatePropertySet extends AbstractPropertySet {
     }
 
     protected void setImpl(int type, String key, Object value) throws PropertyException {
-        PropertySetItem item = configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
+        PropertySetItem item = null;
+
+        // @todo  This is bad, we need to change this to maybe return null instead...
+        try {
+            item = configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
+        } catch (PropertyException pe) {
+            // this is a check to try and figure out did we have a real exception
+            // or maybe have an exists(key) method? 
+            if (pe.getMessage().indexOf("Could not find key") == -1) {
+                throw pe;
+            }
+        }
 
         if (item == null) {
             item = new PropertySetItem(entityName, entityId.longValue(), key);

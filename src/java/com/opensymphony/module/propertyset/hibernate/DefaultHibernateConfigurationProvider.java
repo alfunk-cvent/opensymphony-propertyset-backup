@@ -28,6 +28,10 @@ public class DefaultHibernateConfigurationProvider implements HibernateConfigura
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
     public Configuration getConfiguration() {
         return configuration;
     }
@@ -38,6 +42,10 @@ public class DefaultHibernateConfigurationProvider implements HibernateConfigura
         }
 
         return propertySetDAO;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public void setupConfiguration(Map configurationProperties) {
