@@ -63,7 +63,6 @@
   </target>
 
   <target name="clean" depends="init">
-    <delete dir="${tmp}"/>
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
     <delete>
@@ -77,8 +76,6 @@
   </target>
 
   <target name="ejbdoclet" depends="init">
-    <!-- work around a bug in xdoclet -->
-    <delete file="${build.java}/META-INF/orion-ejb-jar.xml" />
     <ejbdoclet ejbspec="2.0" verbose="false" destdir="${src.java}">
       <fileset dir="${src.java}">
         <include name="com/opensymphony/module/propertyset/ejb/**/*EJB.java" />
@@ -121,6 +118,7 @@
       <fileset dir="${src.test}">
         <include name="**/*.xml" />
         <include name="**/*.properties"/>
+        <include name="**/*.sql"/>
       </fileset>
     </copy>
     <mkdir dir="${dist}/docs/junit"/>
