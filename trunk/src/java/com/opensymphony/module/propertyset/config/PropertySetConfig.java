@@ -4,6 +4,11 @@
  */
 package com.opensymphony.module.propertyset.config;
 
+import com.opensymphony.util.ClassLoaderUtil;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.w3c.dom.*;
 
 import org.xml.sax.SAXException;
@@ -28,6 +33,12 @@ public class PropertySetConfig {
 
     private static PropertySetConfig config;
     private static final Object lock = new Object();
+    private static final Log log = LogFactory.getLog(PropertySetConfig.class);
+    private static final String[] CONFIG_LOCATIONS = new String[] {
+        "propertyset.xml", "/propertyset.xml", "META-INF/propertyset.xml",
+        "/META-INF/propertyset.xml", "META-INF/propertyset-default.xml",
+        "/META-INF/propertyset-default.xml"
+    };
 
     //~ Instance fields ////////////////////////////////////////////////////////
 
@@ -58,6 +69,14 @@ public class PropertySetConfig {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            //close the input stream
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) { /* ignore */
+                }
+            }
         }
 
         // get propertysets
@@ -106,48 +125,34 @@ public class PropertySetConfig {
         return (String) propertySets.get(name);
     }
 
-    private InputStream load() {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    /**
+     * Load the config from locations found in {@link #CONFIG_LOCATIONS}
+     *
+     * @return  An inputstream to load from
+     * @throws IllegalArgumentException     If none of the config files could be found.
+     */
+    private InputStream load() throws IllegalArgumentException {
         InputStream is = null;
 
-        try {
-            is = classLoader.getResourceAsStream("propertyset.xml");
-        } catch (Exception e) {
-        }
+        for (int i = 0; i < CONFIG_LOCATIONS.length; i++) {
+            String location = CONFIG_LOCATIONS[i];
 
-        if (is == null) {
             try {
-                is = classLoader.getResourceAsStream("/propertyset.xml");
+                is = ClassLoaderUtil.getResourceAsStream(location, this.getClass());
+
+                //if we have found something then stop looking
+                if (is != null) {
+                    return is;
+                }
             } catch (Exception e) {
+                //do nothing.
             }
         }
 
         if (is == null) {
-            try {
-                is = classLoader.getResourceAsStream("META-INF/propertyset.xml");
-            } catch (Exception e) {
-            }
-        }
-
-        if (is == null) {
-            try {
-                is = classLoader.getResourceAsStream("/META-INF/propertyset.xml");
-            } catch (Exception e) {
-            }
-        }
-
-        if (is == null) {
-            try {
-                is = classLoader.getResourceAsStream("META-INF/propertyset-default.xml");
-            } catch (Exception e) {
-            }
-        }
-
-        if (is == null) {
-            try {
-                is = classLoader.getResourceAsStream("/META-INF/propertyset-default.xml");
-            } catch (Exception e) {
-            }
+            String exceptionMessage = "Could not load propertyset config using '" + CONFIG_LOCATIONS + "'.  Please check your classpath.";
+            log.fatal(exceptionMessage);
+            throw new IllegalArgumentException(exceptionMessage);
         }
 
         return is;

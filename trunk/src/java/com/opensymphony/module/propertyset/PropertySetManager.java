@@ -6,6 +6,8 @@ package com.opensymphony.module.propertyset;
 
 import com.opensymphony.module.propertyset.config.PropertySetConfig;
 
+import com.opensymphony.util.ClassLoaderUtil;
+
 import java.util.Map;
 
 
@@ -19,23 +21,13 @@ public class PropertySetManager {
     //~ Methods ////////////////////////////////////////////////////////////////
 
     public static PropertySet getInstance(String name, Map args) {
-        PropertySet ps = getInstance(name, args, PropertySetManager.class.getClassLoader());
-
-        if (ps == null) {
-            ps = getInstance(name, args, Thread.currentThread().getContextClassLoader());
-        }
-
-        return ps;
-    }
-
-    public static PropertySet getInstance(String name, Map args, ClassLoader loader) {
         PropertySetConfig psc = PropertySetConfig.getConfig();
         String clazz = psc.getClassName(name);
         Map config = psc.getArgs(name);
         Class psClass = null;
 
         try {
-            psClass = loader.loadClass(clazz);
+            psClass = ClassLoaderUtil.loadClass(clazz, PropertySetManager.class);
         } catch (ClassNotFoundException ex) {
             return null;
         }
