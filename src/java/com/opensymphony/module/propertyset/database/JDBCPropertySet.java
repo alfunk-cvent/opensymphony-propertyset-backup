@@ -271,11 +271,11 @@ public class JDBCPropertySet extends AbstractPropertySet {
             setValues(ps, type, key, value);
 
             int rows = ps.executeUpdate();
-            ps.close();
 
             if (rows != 1) {
                 // ok, this is a new value, insert it
                 sql = "INSERT INTO " + tableName + " (" + colString + ", " + colDate + ", " + colData + ", " + colFloat + ", " + colNumber + ", " + colItemType + ", " + colGlobalKey + ", " + colItemKey + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                ps.close();  // previous ps, before reassigning reference.
                 ps = conn.prepareStatement(sql);
                 setValues(ps, type, key, value);
                 ps.executeUpdate();
