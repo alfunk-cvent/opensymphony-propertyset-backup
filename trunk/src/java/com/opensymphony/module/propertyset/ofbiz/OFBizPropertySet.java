@@ -159,7 +159,7 @@ public class OFBizPropertySet extends AbstractPropertySet implements Serializabl
         GenericValue v = findPropertyEntry(key);
 
         if (v == null) {
-            throw new PropertyImplementationException("Property not found");
+            throw new PropertyImplementationException("Property '" + key + "' not found");
         }
 
         return v.getInteger("type").intValue();
