@@ -1,7 +1,3 @@
 build
 dist
-*.iws
-PropertySet.iml
-PropertySet.ipr
-PropertySet1.iml
-PropertySet1.ipr
+*.i*
