@@ -183,8 +183,16 @@ public class MemoryPropertySet extends AbstractPropertySet {
             this.type = type;
         }
 
+        public int getType() {
+            return type;
+        }
+
         public void setValue(Object value) {
             this.value = value;
+        }
+
+        public Object getValue() {
+            return value;
         }
     }
 }
