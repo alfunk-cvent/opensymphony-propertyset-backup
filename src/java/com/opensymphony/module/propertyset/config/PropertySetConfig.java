@@ -4,17 +4,14 @@
  */
 package com.opensymphony.module.propertyset.config;
 
-import com.opensymphony.util.ClassLoaderUtil;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import org.w3c.dom.*;
 
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import java.net.URL;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +30,6 @@ public class PropertySetConfig {
 
     private static PropertySetConfig config;
     private static final Object lock = new Object();
-    private static final Log log = LogFactory.getLog(PropertySetConfig.class);
     private static final String[] CONFIG_LOCATIONS = new String[] {
         "propertyset.xml", "/propertyset.xml", "META-INF/propertyset.xml",
         "/META-INF/propertyset.xml", "META-INF/propertyset-default.xml",
@@ -126,6 +122,41 @@ public class PropertySetConfig {
     }
 
     /**
+    * Load a given resource.
+    *
+    * This method will try to load the resource using the following methods (in order):
+    * <ul>
+    *  <li>From Thread.currentThread().getContextClassLoader()
+    *  <li>From ClassLoaderUtil.class.getClassLoader()
+    *  <li>callingClass.getClassLoader()
+    * </ul>
+    *
+    * @param resourceName The name of the resource to load
+    * @param callingClass The Class object of the calling object
+    */
+    public static URL getResource(String resourceName, Class callingClass) {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(resourceName);
+
+        if (url == null) {
+            url = PropertySetConfig.class.getClassLoader().getResource(resourceName);
+        }
+
+        if (url == null) {
+            ClassLoader cl = callingClass.getClassLoader();
+
+            if (cl != null) {
+                url = cl.getResource(resourceName);
+            }
+        }
+
+        if ((url == null) && (resourceName != null) && (resourceName.charAt(0) != '/')) {
+            return getResource('/' + resourceName, callingClass);
+        }
+
+        return url;
+    }
+
+    /**
      * Load the config from locations found in {@link #CONFIG_LOCATIONS}
      *
      * @return  An inputstream to load from
@@ -138,7 +169,11 @@ public class PropertySetConfig {
             String location = CONFIG_LOCATIONS[i];
 
             try {
-                is = ClassLoaderUtil.getResourceAsStream(location, this.getClass());
+                URL resource = getResource(location, this.getClass());
+
+                if (resource != null) {
+                    is = resource.openStream();
+                }
 
                 //if we have found something then stop looking
                 if (is != null) {
@@ -151,7 +186,6 @@ public class PropertySetConfig {
 
         if (is == null) {
             String exceptionMessage = "Could not load propertyset config using '" + CONFIG_LOCATIONS + "'.  Please check your classpath.";
-            log.fatal(exceptionMessage);
             throw new IllegalArgumentException(exceptionMessage);
         }
 
