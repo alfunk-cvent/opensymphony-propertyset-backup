@@ -25,6 +25,8 @@
 
   <taskdef name="ejbdoclet" classname="xdoclet.modules.ejb.EjbDocletTask" classpathref="cp"/>
 
+    <taskdef resource="clovertasks"/>
+
   <target name="junit-check" depends="init" unless="junit.available">
     <fail message="Cannot run test cases. Please copy lib/build/junit-3.8.1.jar to ${ant.home}/lib"/>
   </target>
@@ -55,7 +57,6 @@
 
     <property name="dist" value="dist"/>
     <property name="docs" value="docs"/>
-    <property name="clover.initstring" location="testcoverage.db"/>
     <property name="packages" value="com.opensymphony.*"/>
 
     <available property="junit.available" classname="junit.framework.TestCase"/>
@@ -69,9 +70,6 @@
       <fileset dir="${src.java}/com/opensymphony/module/propertyset/ejb">
         <exclude name="**/*EJB*.java" />
       </fileset>
-    </delete>
-    <delete>
-      <fileset dir="." includes="testcoverage.db*"/>
     </delete>
   </target>
 
@@ -109,10 +107,10 @@
     <copy file="${src.etc}/propertyset-default.xml" todir="${build.java}/META-INF" />
   </target>
 
-  <target name="test" depends="junit-check,ejbdoclet">
+  <target name="test" depends="junit-check,ejbdoclet,clover.init">
     <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
     <mkdir dir="${build.test}"/>
-    <javac srcdir="${src.java}" destdir="${build.test}" classpathref="cp" debug="on" compiler="org.apache.tools.ant.taskdefs.CloverCompilerAdapter"/>
+    <javac srcdir="${src.java}" destdir="${build.test}" classpathref="cp" debug="on"/>
     <javac srcdir="${src.test}" destdir="${build.test}" classpathref="cp" debug="on"/>
     <copy todir="${build.test}">
       <fileset dir="${src.test}">
@@ -173,11 +171,16 @@
     <javadoc sourcepath="${src.java}" destdir="${dist}/docs/api" stylesheetfile="${docs}/api.css" packagenames="${packages}" classpathref="cp" author="true" version="true" windowTitle="${name} ${version}${release} API" doctitle="${name}" footer="See &lt;a href=&quot;http://www.opensymphony.com&quot;&gt;www.opensymphony.com&lt;/a&gt; for more information." use="true" verbose="false"/>
   </target>
 
+    <target name="clover.init">
+        <clover-setup initString="${build}/testcoverage.db"/>
+    </target>
+
   <target name="clover.report" depends="clover-check,test">
-    <java classname="com.cortexeb.tools.clover.reporters.html.HtmlReporter" fork="true">
-      <arg line="--outputdir ${dist}/docs/clover --showSrc --initstring ${clover.initstring} --title '${name}'"/>
-      <classpath refid="cp"/>
-    </java>
+        <clover-report>
+            <current outfile="${dist}/docs/clover">
+                <format type="html"/>
+            </current>
+        </clover-report>
   </target>
 
   <target name="junit.report" depends="junit-check,test">
