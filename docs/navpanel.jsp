@@ -1,14 +1,14 @@
 <p>
 <h3>About</h3>
 <a href="<%= request.getContextPath() %>/propertyset/">Overview</a><br>
-<a href="http://sourceforge.net/project/showfiles.php?group_id=9890">Download</a><br>
+<a href="http://prdownloads.sourceforge.net/opensymphony/propertyset-1.2.0.zip?download">Download</a><br>
 </p>
 
 <p>
 <h3>Documentation</h3>
 <a href="<%= request.getContextPath() %>/propertyset/usage.jsp">Usage and Configuration</a><br>
 <a href="<%= request.getContextPath() %>/propertyset/tips.jsp">Database Tips</a><br>
-<a href="<%= request.getContextPath() %>/sitemesh/api/">API Reference</a><br>
+<a href="<%= request.getContextPath() %>/propertyset/api/">API Reference</a><br>
 </p>
 
 <p>
