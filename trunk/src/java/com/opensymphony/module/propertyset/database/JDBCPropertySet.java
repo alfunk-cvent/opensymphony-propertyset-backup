@@ -76,19 +76,19 @@ public class JDBCPropertySet extends AbstractPropertySet {
     //~ Instance fields ////////////////////////////////////////////////////////
 
     // config
-    DataSource ds;
-    String colData;
-    String colDate;
-    String colFloat;
-    String colGlobalKey;
-    String colItemKey;
-    String colItemType;
-    String colNumber;
-    String colString;
+    protected DataSource ds;
+    protected String colData;
+    protected String colDate;
+    protected String colFloat;
+    protected String colGlobalKey;
+    protected String colItemKey;
+    protected String colItemType;
+    protected String colNumber;
+    protected String colString;
 
     // args
-    String globalKey;
-    String tableName;
+    protected String globalKey;
+    protected String tableName;
     private String driverName;
     private String productName;
 
