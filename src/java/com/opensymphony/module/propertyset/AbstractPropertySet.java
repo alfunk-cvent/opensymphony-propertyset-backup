@@ -55,10 +55,11 @@ package com.opensymphony.module.propertyset;
  * SUCH DAMAGE.
  * ====================================================================
  */
-
 import com.opensymphony.util.Data;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.w3c.dom.Document;
 
 import java.util.*;
@@ -149,60 +150,60 @@ public abstract class AbstractPropertySet implements PropertySet {
         Object value = null;
 
         switch (type) {
-            case BOOLEAN:
-                value = new Boolean(getBoolean(key));
+        case BOOLEAN:
+            value = new Boolean(getBoolean(key));
 
-                break;
+            break;
 
-            case INT:
-                value = new Integer(getInt(key));
+        case INT:
+            value = new Integer(getInt(key));
 
-                break;
+            break;
 
-            case LONG:
-                value = new Long(getLong(key));
+        case LONG:
+            value = new Long(getLong(key));
 
-                break;
+            break;
 
-            case DOUBLE:
-                value = new Double(getDouble(key));
+        case DOUBLE:
+            value = new Double(getDouble(key));
 
-                break;
+            break;
 
-            case STRING:
-                value = getString(key);
+        case STRING:
+            value = getString(key);
 
-                break;
+            break;
 
-            case TEXT:
-                value = getText(key);
+        case TEXT:
+            value = getText(key);
 
-                break;
+            break;
 
-            case DATE:
-                value = getDate(key);
+        case DATE:
+            value = getDate(key);
 
-                break;
+            break;
 
-            case XML:
-                value = getXML(key);
+        case XML:
+            value = getXML(key);
 
-                break;
+            break;
 
-            case DATA:
-                value = getData(key);
+        case DATA:
+            value = getData(key);
 
-                break;
+            break;
 
-            case PROPERTIES:
-                value = getProperties(key);
+        case PROPERTIES:
+            value = getProperties(key);
 
-                break;
+            break;
 
-            case OBJECT:
-                value = getObject(key);
+        case OBJECT:
+            value = getObject(key);
 
-                break;
+            break;
         }
 
         return value;
@@ -455,41 +456,41 @@ public abstract class AbstractPropertySet implements PropertySet {
 
     protected String type(int type) {
         switch (type) {
-            case PropertySet.BOOLEAN:
-                return "boolean";
+        case PropertySet.BOOLEAN:
+            return "boolean";
 
-            case PropertySet.INT:
-                return "int";
+        case PropertySet.INT:
+            return "int";
 
-            case PropertySet.LONG:
-                return "long";
+        case PropertySet.LONG:
+            return "long";
 
-            case PropertySet.DOUBLE:
-                return "double";
+        case PropertySet.DOUBLE:
+            return "double";
 
-            case PropertySet.STRING:
-                return "string";
+        case PropertySet.STRING:
+            return "string";
 
-            case PropertySet.TEXT:
-                return "text";
+        case PropertySet.TEXT:
+            return "text";
 
-            case PropertySet.DATE:
-                return "date";
+        case PropertySet.DATE:
+            return "date";
 
-            case PropertySet.OBJECT:
-                return "object";
+        case PropertySet.OBJECT:
+            return "object";
 
-            case PropertySet.XML:
-                return "xml";
+        case PropertySet.XML:
+            return "xml";
 
-            case PropertySet.DATA:
-                return "data";
+        case PropertySet.DATA:
+            return "data";
 
-            case PropertySet.PROPERTIES:
-                return "properties";
+        case PropertySet.PROPERTIES:
+            return "properties";
 
-            default:
-                return null;
+        default:
+            return null;
         }
     }
 
