@@ -21,16 +21,16 @@ public interface HibernateConfigurationProvider {
     //~ Methods ////////////////////////////////////////////////////////////////
 
     /**
- * Get a Hibernate configuration object
- */
+    * Get a Hibernate configuration object
+    */
     public Configuration getConfiguration();
 
     HibernatePropertySetDAO getPropertySetDAO();
 
     /**
- * Setup a Hibernate configuration object with the given properties.
- *
- * This will always be called before getConfiguration().
- */
+    * Setup a Hibernate configuration object with the given properties.
+    *
+    * This will always be called before getConfiguration().
+    */
     void setupConfiguration(Map properties);
 }
