@@ -4,32 +4,24 @@
  */
 package com.opensymphony.module.propertyset.hibernate;
 
-import com.opensymphony.module.propertyset.BasePropertySetTest;
+import com.opensymphony.module.propertyset.AbstractPropertySetTest;
 import com.opensymphony.module.propertyset.DatabaseHelper;
-
+import com.opensymphony.module.propertyset.PropertySetManager;
 import net.sf.hibernate.cfg.Configuration;
 
+import java.util.HashMap;
 
 /**
  * This test case tests a propertyset backed by Hibernate
  *
  * @author Eric Pugh (epugh@upstate.com)
  */
-public class HibernatePropertySetTest extends BasePropertySetTest {
-    //~ Constructors ///////////////////////////////////////////////////////////
-
-    public HibernatePropertySetTest(String s) {
-        super(s);
-    }
+public class HibernatePropertySetTest extends AbstractPropertySetTest {
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
-    public String getType() {
-        return "hibernate";
-    }
-
     public void setUp() throws Exception {
-        //DatabaseHelper.exportSchemaForJDBC();
+        super.setUp();
         DatabaseHelper.createDatabase("");
 
         Configuration config = DatabaseHelper.createHibernateConfiguration();
@@ -37,11 +29,10 @@ public class HibernatePropertySetTest extends BasePropertySetTest {
         configurationProvider.setConfiguration(config);
         configurationProvider.setSessionFactory(config.buildSessionFactory());
 
+        HashMap args = new HashMap();
         args.put("entityName", "testHibernate");
         args.put("entityId", new Long(3));
-
-        //args.put("sessionFactory",DatabaseHelper.getSessionFactory());
         args.put("configurationProvider", configurationProvider);
-        super.setUp();
+        ps = PropertySetManager.getInstance("hibernate", args);
     }
 }

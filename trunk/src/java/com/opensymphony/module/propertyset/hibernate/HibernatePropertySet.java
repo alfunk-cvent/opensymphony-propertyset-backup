@@ -6,6 +6,7 @@ package com.opensymphony.module.propertyset.hibernate;
 
 import com.opensymphony.module.propertyset.AbstractPropertySet;
 import com.opensymphony.module.propertyset.PropertyException;
+import com.opensymphony.module.propertyset.PropertySet;
 
 import com.opensymphony.util.ClassLoaderUtil;
 
@@ -59,9 +60,11 @@ public class HibernatePropertySet extends AbstractPropertySet {
 
     public boolean exists(String key) throws PropertyException {
         try {
-            findByKey(key);
+            if (findByKey(key) != null) {
+                return true;
+            }
 
-            return true;
+            return false;
         } catch (PropertyException e) {
             return false;
         }
@@ -208,4 +211,16 @@ public class HibernatePropertySet extends AbstractPropertySet {
     private PropertySetItem findByKey(String key) throws PropertyException {
         return configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
     }
+
+    public boolean supportsType(int type) {
+        switch(type) {
+            case PropertySet.DATA:
+            case PropertySet.OBJECT:
+            case PropertySet.PROPERTIES:
+            case PropertySet.XML:
+                return false;
+        }
+        return true;
+    }
+
 }

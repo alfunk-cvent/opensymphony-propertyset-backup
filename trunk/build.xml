@@ -118,6 +118,9 @@
         <include name="**/*.properties"/>
         <include name="**/*.sql"/>
       </fileset>
+        <fileset dir="${src.java}">
+            <include name="**/*.xml"/>
+        </fileset>
     </copy>
     <mkdir dir="${dist}/docs/junit"/>
     <junit printsummary="withOutAndErr" haltonfailure="no" haltonerror="no" fork="yes">
