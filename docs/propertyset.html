@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>OSCore PropertySet </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="main.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h1>OSCore PropertySet </h1>
+<p>The PropertySet module is probably the most used component in OSCore. It provides 
+  a generic way to store and retrieve serializable information via a standard 
+  interface (<i>com.opensymphony.module.propertyset.PropertySet</i>). The idea 
+  behind the PropertSet module is that each entity instance in an application 
+  can have some extra set of attributed unknown at development time. One example 
+  of this is metadata, as the requirements for metadata change frequently in evolving 
+  businesses. By utilizing the PropertySet module, one can write an application 
+  that uses datasets unknown to the developer. Each property set implementation 
+  has it's own way of associating a PropertySet with an entity instance, but the 
+  usual way is by a key that consists of a String, entityName, and a long, entityId. 
+</p>
+<p>There are several PropertySet implementations provided in OSCore, but you are 
+  free to write your own to best fit your specific requirements. The three major 
+  implementations are:</p>
+<ul>
+  <li>EJBPropertySet</li>
+  <li>JDBCPropertySet</li>
+  <li>OFBizPropertySet</li>
+</ul>
+<p>All of these implementations persist data to a relational database. The following 
+  SQL script will create the tables that these implementations require. Please 
+  note that this SQL script has only been tested on Oracle and Hypersonic databases 
+  and may require slight modifications </p>
+<pre>	create table OS_PROPERTYDATA (id NUMBER not null primary key, value LONG RAW null)
+	create table OS_PROPERTYDATE (id NUMBER not null primary key, value DATE null)
+	create table OS_PROPERTYDECIMAL (id NUMBER not null primary key, value double precision null)
+	create table OS_PROPERTYNUMBER (id NUMBER not null primary key, value NUMBER null)
+	create table OS_PROPERTYENTRY (id NUMBER not null primary key, entityName VARCHAR2(255) null, entityId NUMBER null, type NUMBER null, keyValue VARCHAR2(255) null)
+	create table OS_PROPERTYSTRING (id NUMBER not null primary key, value VARCHAR2(255) null)
+</pre>
+<p><b>EJBPropertySet</b></p>
+<p>In order to use the EJBPropertySet, you must install OSCore using the <a href="installation.html">EJB 
+  Installation</a>. The EJBPropertySet will only work if oscore.jar has successfully 
+  deployed to your application server. Also, the EJBPropertySet is also used in 
+  the <a href="helper.html">helper class</a> <i>com.opensymphony.ejb.EntityAdapter</i>, 
+  which essentially provides a PropertySet for any entity bean that extends EntityAdapter. 
+  The following is some sample code using the EJBPropertySet:</p>
+<pre>	PropertyStoreHome psh = (PropertyStoreHome)<br>		EJBUtils.lookup(&quot;ejb/os.PropertyStore&quot;, PropertyStoreHome.class);
+	PropertySet ps = new EJBPropertySet(psh, &quot;blah&quot;,20);
+	ps.setString(&quot;foo&quot;, ps.getString(&quot;foo&quot;) + &quot;!&quot;); // 'foo' now is 'foo'!
+</pre>
+<p>In order to use the EJBPropertySet, we recommend that you place the following 
+  ejb-ref in your web.xml or ejb-jar.xml deployment descriptor. This ejb-ref will 
+  also need to be mapped to the jndi-name <b>os.PropertyStore</b> using vendor-specific 
+  deployment descriptors:</p>
+<pre>	&lt;ejb-ref&gt;
+		&lt;ejb-ref-name&gt;ejb/os.PropertyStore&lt;/ejb-ref-name&gt;
+		&lt;ejb-ref-type&gt;Session&lt;/ejb-ref-type&gt;
+		&lt;home&gt;com.opensymphony.module.propertyset.ejb.PropertyStoreHome&lt;/home&gt;
+		&lt;remote&gt;com.opensymphony.module.propertyset.ejb.PropertyStore&lt;/remote&gt;
+		&lt;ejb-link&gt;os.PropertyStore&lt;/ejb-link&gt;
+	&lt;/ejb-ref&gt;</pre>
+<p><b>JDBCPropertySet</b></p>
+<p>There is nothing very special about the JDBCPropertySet. Here is some a sample 
+  usage:</p>
+<pre>	DataSource ds = new InitialContext().lookup(&quot;java:comp/env/ejb/DefaultDS&quot;);
+	PropertySet ps = new JDBCPropertySet(ds.openConnection());
+	ps.setString(&quot;foo&quot;, &quot;bar&quot;);</pre>
+<p><b>OFBizPropertySet</b></p>
+<p>There is nothing very special about the OFBizPropertySet once the OpenForBusiness 
+  entity definitions have been <a href="installation.html">configured properly</a>. 
+  The following is a sample usage:</p>
+<pre>	PropertySet ps = new OFBizPropertySet(&quot;myEntity&quot;, 100);
+	ps.setString(&quot;foo&quot;, &quot;bar&quot;); // just set foo=bar for myEntity #100</pre>
+<p><br>
+</p>
+</body>
+</html>
