@@ -131,6 +131,7 @@
       <batchtest todir="${dist}/docs/junit">
         <fileset dir="${src.test}">
           <include name="**/*Test.java"/>
+            <exclude name="**/Abstract*"/>
           <exclude name="**/Base*Test.java"/>
         </fileset>
       </batchtest>
