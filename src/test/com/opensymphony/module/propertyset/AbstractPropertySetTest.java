@@ -105,6 +105,10 @@ public class AbstractPropertySetTest extends TestCase {
         }
     }
 
+    public void testGetStringNotInPropertySet() {
+        assertNull(ps.getString("test555"));
+    }
+
     public void testGetTypeForBoolean() {
         if (ps.supportsType(PropertySet.BOOLEAN)) {
             ps.setBoolean("testBoolean", true);
