@@ -7,7 +7,6 @@
             <key-property name="entityName" column="entity_name" length="125" />
             <key-property name="entityId" column="entity_id" />
             <key-property name="key" column="entity_key" />
-
         </composite-id>
 
         <property name="type" column="key_type" />
@@ -16,7 +15,7 @@
         <property name="stringVal" column="string_val" />
         <property name="longVal" column="long_val" />
         <property name="intVal" column="int_val" />
-        <property name="dateVal" type="date" column="date_val" />
+        <property name="dateVal" type="timestamp" column="date_val" />
     </class>
 	<query name="all_keys"><![CDATA[
 		select item.key from item in class com.opensymphony.module.propertyset.hibernate.PropertySetItem

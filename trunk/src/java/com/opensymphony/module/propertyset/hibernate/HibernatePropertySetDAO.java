@@ -16,7 +16,13 @@ import java.util.Collection;
 public interface HibernatePropertySetDAO {
     //~ Methods ////////////////////////////////////////////////////////////////
 
-    void setImpl(PropertySetItem item);
+    /**
+     * Save the implementation of a PropertySetItem.
+     *
+     * @param item
+     * @param isUpdate Boolean indicating whether or not this item already exists
+     */
+    void setImpl(PropertySetItem item, boolean isUpdate);
 
     Collection getKeys(String entityName, Long entityId, String prefix, int type);
 

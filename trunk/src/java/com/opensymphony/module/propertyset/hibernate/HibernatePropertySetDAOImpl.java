@@ -34,12 +34,18 @@ public class HibernatePropertySetDAOImpl implements HibernatePropertySetDAO {
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
-    public void setImpl(PropertySetItem item) {
+    public void setImpl(PropertySetItem item, boolean isUpdate) {
         Session session = null;
 
         try {
             session = this.sessionFactory.openSession();
-            session.save(item);
+
+            if (isUpdate) {
+                session.update(item);
+            } else {
+                session.save(item);
+            }
+
             session.flush();
         } catch (HibernateException he) {
             throw new PropertyException("Could not save key '" + item.getKey() + "':" + he.getMessage());
@@ -88,7 +94,7 @@ public class HibernatePropertySetDAOImpl implements HibernatePropertySetDAO {
             item = HibernatePropertySetDAOUtils.getItem(session, entityName, entityId, key);
             session.flush();
         } catch (HibernateException e) {
-            throw new PropertyException("Could not find key '" + key + "': " + e.getMessage());
+            return null;
         } finally {
             try {
                 if (session != null) {

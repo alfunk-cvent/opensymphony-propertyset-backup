@@ -115,18 +115,11 @@ public class HibernatePropertySet extends AbstractPropertySet {
     protected void setImpl(int type, String key, Object value) throws PropertyException {
         PropertySetItem item = null;
 
-        // @todo  This is bad, we need to change this to maybe return null instead...
-        try {
-            item = configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
-        } catch (PropertyException pe) {
-            // this is a check to try and figure out did we have a real exception
-            // or maybe have an exists(key) method? 
-            if (pe.getMessage().indexOf("Could not find key") == -1) {
-                throw pe;
-            }
-        }
+        boolean update = true;
+        item = configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
 
         if (item == null) {
+            update = false;
             item = new PropertySetItem(entityName, entityId.longValue(), key);
         } else if (item.getType() != type) {
             throw new PropertyException("Existing key '" + key + "' does not have matching type of " + type);
@@ -170,11 +163,15 @@ public class HibernatePropertySet extends AbstractPropertySet {
 
         item.setType(type);
 
-        configProvider.getPropertySetDAO().setImpl(item);
+        configProvider.getPropertySetDAO().setImpl(item, update);
     }
 
     protected Object get(int type, String key) throws PropertyException {
         PropertySetItem item = findByKey(key);
+
+        if (item == null) {
+            return null;
+        }
 
         if (item.getType() != type) {
             throw new PropertyException("key '" + key + "' does not have matching type of " + type);
@@ -205,12 +202,6 @@ public class HibernatePropertySet extends AbstractPropertySet {
     }
 
     private PropertySetItem findByKey(String key) throws PropertyException {
-        PropertySetItem item = configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
-
-        if (item != null) {
-            return item;
-        } else {
-            throw new PropertyException("Unknown key '" + key + "'");
-        }
+        return configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
     }
 }
