@@ -16,13 +16,12 @@ import java.util.List;
  * User: Mike
  * Date: Jul 26, 2003
  * Time: 5:46:58 PM
- * To change this template use Options | File Templates.
  */
 public class HibernatePropertySetDAOUtils {
     //~ Methods ////////////////////////////////////////////////////////////////
 
     public static PropertySetItem getItem(Session session, String entityName, Long entityId, String key) throws HibernateException {
-        return (PropertySetItem) session.load(PropertySetItem.class, new PropertySetItem(entityName, entityId.longValue(), key));
+        return (PropertySetItem) session.load(PropertySetItem.class, new PropertySetItemImpl(entityName, entityId.longValue(), key));
     }
 
     /**

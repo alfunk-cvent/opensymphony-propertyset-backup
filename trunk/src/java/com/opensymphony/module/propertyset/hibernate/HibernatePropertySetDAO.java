@@ -26,6 +26,8 @@ public interface HibernatePropertySetDAO {
 
     Collection getKeys(String entityName, Long entityId, String prefix, int type);
 
+    PropertySetItem create(String entityName, long entityId, String key);
+
     PropertySetItem findByKey(String entityName, Long entityId, String key);
 
     void remove(String entityName, Long entityId, String key);
