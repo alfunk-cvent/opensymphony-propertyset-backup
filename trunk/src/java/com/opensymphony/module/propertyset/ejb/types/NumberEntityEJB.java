@@ -63,8 +63,8 @@ import javax.ejb.*;
 
 
 /**
- * AbstractValueEntityEJB concrete implementation optimized for storing whole numbers
- * (i.e. integers). This can be used to store BOOLEAN, INT and LONG.
+ * AbstractValueEntityEJB concrete implementation optimized for storing numbers.
+ *  This can be used to store BOOLEAN, INT and LONG.
  *
  * @ejb.bean
  *  type="CMP"

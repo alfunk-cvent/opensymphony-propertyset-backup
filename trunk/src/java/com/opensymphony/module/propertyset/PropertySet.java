@@ -287,8 +287,8 @@ public interface PropertySet {
     boolean supportsType(int type);
 
     /**
-    * Whether this PropertySet implementation supports types when storing
-    * values (i.e. the type of data is stored as well as the actual value).
+    * Whether this PropertySet implementation supports types when storing values.
+     * (i.e. the type of data is stored as well as the actual value).
     */
     boolean supportsTypes();
 }
