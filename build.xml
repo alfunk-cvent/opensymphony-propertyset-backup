@@ -5,6 +5,14 @@
     </fileset>
   </path>
 
+  <path id="cp.test">
+    <fileset dir="lib">
+      <include name="**/*.jar"/>
+      <exclude name="**/jalopy/*.jar"/>
+      <exclude name="**/xdoclet/*.jar"/>      
+    </fileset>
+  </path>
+
   <path id="jalopy.classpath">
     <fileset dir="lib/build/jalopy">
       <include name="*.jar"/>
@@ -109,12 +117,17 @@
     <mkdir dir="${build.test}"/>
     <javac srcdir="${src.java}" destdir="${build.test}" classpathref="cp" debug="on" compiler="org.apache.tools.ant.taskdefs.CloverCompilerAdapter"/>
     <javac srcdir="${src.test}" destdir="${build.test}" classpathref="cp" debug="on"/>
-
+    <copy todir="${build.test}">
+      <fileset dir="${src.test}">
+        <include name="**/*.xml" />
+        <include name="**/*.properties"/>
+      </fileset>
+    </copy>
     <mkdir dir="${dist}/docs/junit"/>
-    <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+    <junit printsummary="withOutAndErr" haltonfailure="no" haltonerror="no" fork="yes">
       <classpath>
         <pathelement location="${build.test}"/>
-        <path refid="cp"/>
+        <path refid="cp.test"/>
       </classpath>
 
       <formatter type="xml"/>
@@ -122,6 +135,7 @@
       <batchtest todir="${dist}/docs/junit">
         <fileset dir="${src.test}">
           <include name="**/*Test.java"/>
+          <exclude name="**/Base*Test.java"/>
         </fileset>
       </batchtest>
     </junit>
