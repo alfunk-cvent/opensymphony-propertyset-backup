@@ -29,8 +29,7 @@ public class JDBCPropertySetTest extends BasePropertySetTest {
     }
 
     public void setUp() throws Exception {
-        //ok so this code usually goes in the setUp but...
-        DatabaseHelper.createDatabase("src/etc/deployment/jdbc/mckoi.sql");
+        DatabaseHelper.createDatabase(getClass().getResource("/mckoi.sql"));
         args.put("globalKey", "test");
         super.setUp();
     }

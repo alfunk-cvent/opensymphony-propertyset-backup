@@ -8,21 +8,18 @@ import com.mckoi.database.jdbc.MSQLException;
 
 import junit.framework.Assert;
 
-import net.sf.hibernate.SessionFactory;
+import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 import net.sf.hibernate.cfg.Configuration;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.net.URL;
 
 import javax.naming.InitialContext;
 
@@ -38,114 +35,124 @@ public class DatabaseHelper {
     //~ Static fields/initializers /////////////////////////////////////////////
 
     private static Log log = LogFactory.getLog(DatabaseHelper.class);
-    private static SessionFactory sessionFactory;
-    private static Configuration configuration;
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
-    /**
-     * @return
-     */
-    public static Configuration getConfiguration() {
-        return configuration;
+  /**
+   * Create the database by loading a URL pointing at a SQL script.
+   */
+  public static void createDatabase(URL url)
+  {
+    Assert.assertNotNull("Database url is null", url);
+
+    try
+    {
+      String sql = getDatabaseCreationScript(url);
+      createDatabase(sql);
     }
-
-    /**
-     * @return Hibernate SessionFactory
-     */
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+    catch(IOException e)
+    {
+      log.error(e.getMessage(), e);
     }
+  }
 
-    public static void createDatabase(String scriptFile) {
-        Connection connection;
-        Statement statement = null;
-        String sqlLine = null;
+  /**
+   * Create a new database and initialize it with the specified sql script.
+   * @param sql the sql to execute
+   */
+  public static void createDatabase(String sql)
+  {
+    Connection connection;
+    Statement statement = null;
+    String sqlLine = null;
 
-        try {
-            InitialContext context = new InitialContext();
-            DataSource ds = (DataSource) context.lookup("jdbc/CreateDS");
-            connection = ds.getConnection();
-            statement = connection.createStatement();
+    try
+    {
+      InitialContext context = new InitialContext();
+      DataSource ds = (DataSource)context.lookup("jdbc/CreateDS");
+      connection = ds.getConnection();
+      statement = connection.createStatement();
 
-            String sql = getDatabaseCreationScript(scriptFile);
-            String[] sqls = StringUtils.split(sql, ";");
+      String[] sqls = StringUtils.split(sql, ";");
 
-            for (int i = 0; i < sqls.length; i++) {
-                sqlLine = StringUtils.stripToEmpty(sqls[i]);
-                sqlLine = StringUtils.replace(sqlLine, "\r", "");
-                sqlLine = StringUtils.replace(sqlLine, "\n", "");
+      for(int i = 0; i < sqls.length; i++)
+      {
+        sqlLine = StringUtils.stripToEmpty(sqls[i]);
+        sqlLine = StringUtils.replace(sqlLine, "\r", "");
+        sqlLine = StringUtils.replace(sqlLine, "\n", "");
 
-                //String s = sqls[i];
-                if ((sqlLine.length() > 0) && (sqlLine.charAt(0) != '#')) {
-                    try {
-                        statement.executeQuery(sqlLine);
-                    } catch (MSQLException msqlEx) {
-                        // Eat any drop tables that fail.  The IF EXISTS clause doesn't seem to work.
-                        if (msqlEx.getMessage().indexOf("does not exist") == -1) {
-                            throw msqlEx;
-                        }
-                    }
-                }
+        //String s = sqls[i];
+        if((sqlLine.length() > 0) && (sqlLine.charAt(0) != '#'))
+        {
+          try
+          {
+            statement.executeQuery(sqlLine);
+          }
+          catch(MSQLException e)
+          {
+            if(sqlLine.toLowerCase().indexOf("drop") == -1)
+            {
+              log.error("Error executing " + sqlLine, e);
             }
-        } catch (Exception e) {
-            log.error("Database creation error.  sqlLine:" + sqlLine, e);
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (Exception ex) {
-                    //not catch
-                }
-            }
+          }
         }
+      }
     }
-
-    /**
-     * Use the default Hibernate *.hbm.xml files.  These build the primary keys
-     * based on an identity or sequence, whatever is native to the database.
-     * @throws Exception
-     */
-    public static void exportSchemaForHibernate() throws Exception {
-        configuration = new Configuration();
-
-        //cfg.addClass(HibernateHistoryStep.class);
-        File fileHibernatePropertySetItem = new File("src/java/com/opensymphony/module/propertyset/hibernate/PropertySetItem.hbm.xml");
-
-        Assert.assertTrue(fileHibernatePropertySetItem.exists());
-        configuration.addFile(fileHibernatePropertySetItem);
-
-        // Use SchemaExport to see what Hibernate would have created!
-        createDatabase("src/etc/deployment/hibernate/mckoi.sql");
-
-        //new SchemaExport(configuration).create(true, true);
-        sessionFactory = configuration.buildSessionFactory();
-        System.out.println("done");
+    catch(Exception e)
+    {
+      log.error("Database creation error.  sqlLine:" + sqlLine, e);
     }
-
-    private static String getDatabaseCreationScript(String scriptFile) throws Exception {
-        File file = new File(scriptFile);
-        Assert.assertTrue(file.exists());
-
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-
-        return readTextStream(bis);
-    }
-
-    private static String readTextStream(InputStream is) throws Exception {
-        //System.out.println("InputStream" + is.toString());
-        InputStreamReader reader = new InputStreamReader(is);
-        StringBuffer sb = new StringBuffer(100);
-        int c = 0;
-
-        while (c > -1) {
-            c = reader.read();
-
-            if (c > -1) {
-                sb.append((char) c);
-            }
+    finally
+    {
+      if(statement != null)
+      {
+        try
+        {
+          statement.close();
         }
-
-        return sb.toString();
+        catch(Exception ex)
+        {
+          //not catch
+        }
+      }
     }
+  }
+
+  /**
+   * Use the default Hibernate *.hbm.xml files.  These build the primary keys
+   * based on an identity or sequence, whatever is native to the database.
+   * @throws Exception
+   */
+  public static Configuration createHibernateConfiguration() throws Exception
+  {
+    Configuration configuration = new Configuration();
+
+    //cfg.addClass(HibernateHistoryStep.class);
+    URL propertySet = DatabaseHelper.class.getResource("/com/opensymphony/module/propertyset/hibernate/PropertySetItemImpl.hbm.xml");
+    Assert.assertTrue(propertySet != null);
+    configuration.addURL(propertySet);
+
+    new SchemaExport(configuration).create(false, true);
+
+    return configuration;
+  }
+
+  private static String getDatabaseCreationScript(URL url) throws IOException
+  {
+    InputStreamReader reader = new InputStreamReader(url.openStream());
+    StringBuffer sb = new StringBuffer(100);
+    int c = 0;
+
+    while(c > -1)
+    {
+      c = reader.read();
+
+      if(c > -1)
+      {
+        sb.append((char)c);
+      }
+    }
+
+    return sb.toString();
+  }
 }
