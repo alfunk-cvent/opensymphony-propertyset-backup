@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>OSCore Requirements</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="main.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h1>PropertySet Requirements</h1>
+<p>PropertySet has different requirements depending on the </p>
+<p>OSCore is distributed as a single <b>oscore.jar</b> file. This file is deployable 
+  as an EJB module or can be used as a standalone library, such as in a web project's 
+  <b>WEB-INF/lib</b> directory. More info on the actual deployment/installation 
+  of OSCore can be found in <a href="installation.html">here</a>. Because OSCore 
+  can be intalled in two seperate ways (deployed or just used as an external library), 
+  there are different requirements:</p>
+<h3>EJB Requirements</h3>
+<p>If you are going to install OSCore as a deployable EJB module, there requirements 
+  a much stricter. OpenSymphony has made an effort to support every app server 
+  possible, but unfortunately we can't provide support for all vendors. Included 
+  &quot;out of the box&quot; in OSCore is vendor deployment descriptors for the 
+  following vendors:</p>
+<ul>
+  <li><a href="http://www.orionserver.com">Orion Application Server</a> (version 
+    1.3.8+)</li>
+  <li><a href="http://otn.oracle.com/products/ias/content.html">Oracle9iAS</a>, 
+    aka OC4J (version 1.0.2.2+)</li>
+  <li><a href="http|//www.bea.com">WebLogic Server</a> (version 6.1)</li>
+  <li><a href="http://www.jboss.org">JBoss</a> (version 2.4.4)</li>
+  <li><a href="http://www.pramati.com">Pramati Application Server</a> (version 
+    3.0)</li>
+  <li><a href="http://www.jrun.com">JRun</a> (version 4.0)</li>
+</ul>
+<p>If your application server isn't listed here, then you will need to create 
+  your own vendor specific deployment descriptors and repackage OSCore, either 
+  by hand or with any tools supplied by your app server vendor. Likewise, if you 
+  requirement special changes to any vendor deployment descriptors already packaged 
+  in OSCore, you'll need to open up the jar file and make any changes (such as 
+  datasource or CMP mappings).</p>
+<p>OSCore also requires that a datasource be configured inside the application 
+  server. By default the datasource used is <i>jdbc/DefaultDS</i>. <b>In addition 
+  to these requirements, the <i>Standalone Requirements</i> below also apply.</b></p>
+<h3>Standalone Requirements</h3>
+<p>If you are not utilizing the EJB components of OSCore, the requirements for 
+  using OSCore are very limited. Most libraries are optional, depending on which 
+  provider you use for different utility classes. You may require the following 
+  libraries (included in the OSCore distribution, but not related to OpenSymphony 
+  in any way):</p>
+<ul>
+  <li><a href="http://jakarta.apache.org/log4j/docs/index.html">log4j.jar</a>, 
+    required if you use the Log4Provider</li>
+  <li><a href="http://xml.apache.org/xalan-j/index.html">xalan.jar</a>, required 
+    if you use the XalanXMLPrinterProvider or the XalanXPathProvider</li>
+  <li>ognl.jar, required if you use the OGNLBeanProvider</li>
+  <li>jdbc.jar, required if you use the JDBCPropertySet</li>
+  <li><a href="http://www.ofbiz.org">ofbcore-entity.jar and ofbizcore-share.jar</a>, 
+    if you use the OFBizPropertySet</li>
+</ul>
+</body>
+</html>
