@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 
 import java.util.*;
+import java.io.Serializable;
 
 
 /**
@@ -30,7 +31,7 @@ import java.util.*;
  * Time: 11:28:06 PM
  * @author Hani Suleiman
  */
-public class AggregatePropertySet extends AbstractPropertySet {
+public class AggregatePropertySet extends AbstractPropertySet implements Serializable {
     //~ Static fields/initializers /////////////////////////////////////////////
 
     private static final Log log = LogFactory.getLog(AggregatePropertySet.class);
