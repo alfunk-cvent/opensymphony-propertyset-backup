@@ -19,10 +19,12 @@ import java.util.HashMap;
  * @author Eric Pugh (epugh@upstate.com)
  */
 public class JDBCPropertySetTest extends AbstractPropertySetTest {
+    //~ Methods ////////////////////////////////////////////////////////////////
 
     public void setUp() throws Exception {
         super.setUp();
         DatabaseHelper.createDatabase(getClass().getResource("/mckoi.sql"));
+
         HashMap args = new HashMap();
         args.put("globalKey", "test");
         ps = PropertySetManager.getInstance("jdbc", args);

@@ -63,7 +63,11 @@ public class CachingPropertySet implements PropertySet, Serializable {
         } else if (value instanceof Double) {
             setDouble(key, DataUtil.getDouble((Double) value));
         } else if (value instanceof String) {
-            setString(key, (String) value);
+            if (value.toString().length() > 255) {
+                setText(key, (String) value);
+            } else {
+                setString(key, (String) value);
+            }
         } else if (value instanceof Date) {
             setDate(key, (Date) value);
         } else if (value instanceof Document) {
@@ -104,6 +108,11 @@ public class CachingPropertySet implements PropertySet, Serializable {
 
         case STRING:
             value = getString(key);
+
+            break;
+
+        case TEXT:
+            value = getText(key);
 
             break;
 

@@ -9,9 +9,10 @@ import com.opensymphony.module.propertyset.memory.MemoryPropertySet;
 import com.opensymphony.util.Data;
 import com.opensymphony.util.XMLUtils;
 
-import org.w3c.dom.Document;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import org.w3c.dom.Document;
 
 import java.io.*;
 
@@ -28,9 +29,12 @@ import java.util.*;
  * @author hani
  */
 public class PropertiesFilePropertySet extends MemoryPropertySet {
-    //~ Instance fields ////////////////////////////////////////////////////////
+    //~ Static fields/initializers /////////////////////////////////////////////
 
     protected static Log log = LogFactory.getLog(PropertiesFilePropertySet.class);
+
+    //~ Instance fields ////////////////////////////////////////////////////////
+
     private File file;
 
     //~ Methods ////////////////////////////////////////////////////////////////
@@ -113,6 +117,7 @@ public class PropertiesFilePropertySet extends MemoryPropertySet {
             int dot = key.lastIndexOf('.');
             int type = Integer.parseInt(key.substring(dot + 1));
             String name = key.substring(0, dot);
+
             if (log.isDebugEnabled()) {
                 log.debug("key=" + key + " type=" + type + " name=" + name);
             }

@@ -119,6 +119,18 @@ public class HibernatePropertySet extends AbstractPropertySet {
         configProvider.getPropertySetDAO().remove(entityName, entityId);
     }
 
+    public boolean supportsType(int type) {
+        switch (type) {
+        case PropertySet.DATA:
+        case PropertySet.OBJECT:
+        case PropertySet.PROPERTIES:
+        case PropertySet.XML:
+            return false;
+        }
+
+        return true;
+    }
+
     protected void setImpl(int type, String key, Object value) throws PropertyException {
         PropertySetItem item = null;
 
@@ -211,16 +223,4 @@ public class HibernatePropertySet extends AbstractPropertySet {
     private PropertySetItem findByKey(String key) throws PropertyException {
         return configProvider.getPropertySetDAO().findByKey(entityName, entityId, key);
     }
-
-    public boolean supportsType(int type) {
-        switch(type) {
-            case PropertySet.DATA:
-            case PropertySet.OBJECT:
-            case PropertySet.PROPERTIES:
-            case PropertySet.XML:
-                return false;
-        }
-        return true;
-    }
-
 }

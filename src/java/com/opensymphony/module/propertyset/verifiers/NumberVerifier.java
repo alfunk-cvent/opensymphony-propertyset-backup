@@ -4,6 +4,7 @@
  */
 package com.opensymphony.module.propertyset.verifiers;
 
+
 /**
  * Handles verification of numbers.
  * Can be configured to only accept specific numeric types (int, float, etc)

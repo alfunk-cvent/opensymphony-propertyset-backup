@@ -5,13 +5,17 @@
 package com.opensymphony.module.propertyset;
 
 import com.opensymphony.util.XMLUtils;
+
 import junit.framework.TestCase;
+
 import org.w3c.dom.Document;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.text.DateFormat;
+
 import java.util.Date;
 import java.util.Properties;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 
 /**
@@ -402,5 +406,4 @@ public class AbstractPropertySetTest extends TestCase {
             assertEquals(doc, ps.getXML("testXml"));
         }
     }
-
 }

@@ -75,7 +75,30 @@ public class OFBizPropertySet extends AbstractPropertySet implements Serializabl
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
-    public Collection getKeys(String prefix, int type) throws PropertyException {
+    public Collection getKeys() throws PropertyException {
+        List results = new ArrayList();
+
+        try {
+            Collection c = getDelegator().findByAnd("OSPropertyEntry", UtilMisc.toMap("entityId", entityId, "entityName", entityName));
+
+            for (Iterator iterator = c.iterator(); iterator.hasNext();) {
+                GenericValue value = (GenericValue) iterator.next();
+                String propertyKey = value.getString("propertyKey");
+
+                if (propertyKey != null) {
+                    results.add(propertyKey);
+                }
+            }
+
+            Collections.sort(results);
+        } catch (GenericEntityException e) {
+            throw new PropertyImplementationException(e);
+        }
+
+        return results;
+    }
+
+    public Collection getKeys(String prefix) throws PropertyException {
         List results = new ArrayList();
 
         try {
@@ -91,6 +114,35 @@ public class OFBizPropertySet extends AbstractPropertySet implements Serializabl
                 String propertyKey = value.getString("propertyKey");
 
                 if ((propertyKey != null) && propertyKey.startsWith(prefix)) {
+                    results.add(propertyKey);
+                }
+            }
+
+            Collections.sort(results);
+        } catch (GenericEntityException e) {
+            throw new PropertyImplementationException(e);
+        }
+
+        return results;
+    }
+
+    public Collection getKeys(String prefix, int type) throws PropertyException {
+        List results = new ArrayList();
+
+        try {
+            // chowda hack
+            if (prefix == null) {
+                prefix = "";
+            }
+
+            Collection c = getDelegator().findByAnd("OSPropertyEntry", UtilMisc.toMap("entityId", entityId, "entityName", entityName));
+
+            for (Iterator iterator = c.iterator(); iterator.hasNext();) {
+                GenericValue value = (GenericValue) iterator.next();
+                String propertyKey = value.getString("propertyKey");
+                Integer entryType = value.getInteger("type");
+
+                if (((propertyKey != null) && propertyKey.startsWith(prefix)) && (entryType.intValue() == type)) {
                     results.add(propertyKey);
                 }
             }
@@ -169,6 +221,18 @@ public class OFBizPropertySet extends AbstractPropertySet implements Serializabl
             log.error("Error removing value from PropertySet", e);
             throw new PropertyImplementationException(e);
         }
+    }
+
+    public boolean supportsType(int type) {
+        switch (type) {
+        case DATA:
+        case OBJECT:
+        case PROPERTIES:
+        case XML:
+            return false;
+        }
+
+        return true;
     }
 
     protected void setImpl(int type, String key, Object obj) throws PropertyException {

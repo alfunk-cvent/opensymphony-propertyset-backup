@@ -6,6 +6,7 @@ package com.opensymphony.ejb;
 
 import javax.ejb.*;
 
+
 /**
  * <p>
  *   Abstract base adapter class to be extended by EJB EntityBeans. <br>

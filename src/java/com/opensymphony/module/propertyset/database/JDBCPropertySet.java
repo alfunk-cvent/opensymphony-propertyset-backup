@@ -238,6 +238,17 @@ public class JDBCPropertySet extends AbstractPropertySet {
         }
     }
 
+    public boolean supportsType(int type) {
+        switch (type) {
+        case PropertySet.PROPERTIES:
+        case PropertySet.TEXT:
+        case PropertySet.XML:
+            return false;
+        }
+
+        return true;
+    }
+
     protected void setImpl(int type, String key, Object value) throws PropertyException {
         if (value == null) {
             throw new PropertyException("JDBCPropertySet does not allow for null values to be stored");
@@ -402,14 +413,15 @@ public class JDBCPropertySet extends AbstractPropertySet {
             break;
 
         case PropertySet.DATA:
-                if (value instanceof Data) {
-                    Data data = (Data) value;
-                    ps.setBytes(3, data.getBytes());
-                }
 
-                if (value instanceof byte[]) {
-                    ps.setBytes(3, (byte[]) value);
-                }
+            if (value instanceof Data) {
+                Data data = (Data) value;
+                ps.setBytes(3, data.getBytes());
+            }
+
+            if (value instanceof byte[]) {
+                ps.setBytes(3, (byte[]) value);
+            }
 
             break;
 
@@ -493,15 +505,4 @@ public class JDBCPropertySet extends AbstractPropertySet {
             throw e;
         }
     }
-
-    public boolean supportsType(int type) {
-        switch(type) {
-            case PropertySet.PROPERTIES:
-            case PropertySet.TEXT:
-            case PropertySet.XML:
-                return false;
-        }
-        return true;
-    }
-
 }

@@ -7,9 +7,11 @@ package com.opensymphony.module.propertyset.hibernate;
 import com.opensymphony.module.propertyset.AbstractPropertySetTest;
 import com.opensymphony.module.propertyset.DatabaseHelper;
 import com.opensymphony.module.propertyset.PropertySetManager;
+
 import net.sf.hibernate.cfg.Configuration;
 
 import java.util.HashMap;
+
 
 /**
  * This test case tests a propertyset backed by Hibernate
@@ -17,7 +19,6 @@ import java.util.HashMap;
  * @author Eric Pugh (epugh@upstate.com)
  */
 public class HibernatePropertySetTest extends AbstractPropertySetTest {
-
     //~ Methods ////////////////////////////////////////////////////////////////
 
     public void setUp() throws Exception {
