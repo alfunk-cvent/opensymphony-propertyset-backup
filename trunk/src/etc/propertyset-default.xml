@@ -20,7 +20,7 @@
     <propertyset name="serializable" class="com.opensymphony.module.propertyset.memory.SerializablePropertySet"/>
     <propertyset name="ofbiz" class="com.opensymphony.module.propertyset.ofbiz.OFBizPropertySet"/>
     <propertyset name="hibernate" class="com.opensymphony.module.propertyset.hibernate.HibernatePropertySet">
-        <arg name="hibernate.connection.datasource" value="jdbs/DefautDS" />
+        <arg name="hibernate.connection.datasource" value="jdbc/DefaultDS" />
         <arg name="hibernate.dialect" value="net.sf.hibernate.dialect.HSQLDialect" />
     </propertyset>
   <propertyset name="ojb" class="com.opensymphony.module.propertyset.ojb.OJBPropertySet"/>
