@@ -10,7 +10,8 @@ import java.util.Map;
 
 
 /**
- * DOCUMENT ME!
+ * The PropertySetManager is a factory for all the different types of
+ * propertysets registered.
  *
  * @author $author$
  * @version $Revision$
@@ -18,6 +19,14 @@ import java.util.Map;
 public class PropertySetManager {
     //~ Methods ////////////////////////////////////////////////////////////////
 
+    /**
+     * Get a propertyset by name.
+     * @param name The name of the propertyset as registered in propertyset.xml.
+     * For example 'ejb', or 'memory'.
+     * @param args The arguments to pass to the propertyset for initialization.
+     * Consult the javadocs for a particular propertyset to see what arguments
+     * it requires and supports.
+     */
     public static PropertySet getInstance(String name, Map args) {
         PropertySet ps = getInstance(name, args, PropertySetManager.class.getClassLoader());
 
@@ -28,6 +37,10 @@ public class PropertySetManager {
         return ps;
     }
 
+    /**
+     * @see #getInstance(String, java.util.Map)
+     * @param loader The classloader to use for loading the propertyset.
+     */
     public static PropertySet getInstance(String name, Map args, ClassLoader loader) {
         PropertySetConfig psc = PropertySetConfig.getConfig();
         String clazz = psc.getClassName(name);
@@ -54,6 +67,11 @@ public class PropertySetManager {
         return null;
     }
 
+    /**
+     * Copy the contents of one propertyset into another.
+     * @param src The propertyset to copy from.
+     * @param dest The propertyset to copy into.
+     */
     public static void clone(PropertySet src, PropertySet dest) {
         PropertySetCloner cloner = new PropertySetCloner();
         cloner.setSource(src);
