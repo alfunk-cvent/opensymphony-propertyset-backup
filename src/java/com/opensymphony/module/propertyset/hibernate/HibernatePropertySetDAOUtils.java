@@ -21,7 +21,7 @@ public class HibernatePropertySetDAOUtils {
     //~ Methods ////////////////////////////////////////////////////////////////
 
     public static PropertySetItem getItem(Session session, String entityName, Long entityId, String key) throws HibernateException {
-        return (PropertySetItem) session.load(PropertySetItem.class, new PropertySetItemImpl(entityName, entityId.longValue(), key));
+        return (PropertySetItem) session.load(PropertySetItemImpl.class, new PropertySetItemImpl(entityName, entityId.longValue(), key));
     }
 
     /**
