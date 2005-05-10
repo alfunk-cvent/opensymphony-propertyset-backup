@@ -234,7 +234,7 @@ public abstract class PropertyEntryEJB implements EntityBean {
             throw new CreateException(e.toString());
         }
 
-        return id;
+        return null;
     }
 
     public void ejbLoad() {
