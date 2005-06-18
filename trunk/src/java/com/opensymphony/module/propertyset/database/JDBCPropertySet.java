@@ -389,6 +389,11 @@ public class JDBCPropertySet extends AbstractPropertySet {
 
                     break;
 
+                case PropertySet.TEXT:
+                    o = rs.getString(colString);
+
+                    break;
+
                 default:
                     throw new InvalidPropertyTypeException("JDBCPropertySet doesn't support this type yet.");
                 }
@@ -482,6 +487,11 @@ public class JDBCPropertySet extends AbstractPropertySet {
             break;
 
         case PropertySet.STRING:
+            ps.setString(1, (String) value);
+
+            break;
+
+        case PropertySet.TEXT:
             ps.setString(1, (String) value);
 
             break;
