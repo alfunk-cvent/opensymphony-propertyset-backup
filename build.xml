@@ -3,7 +3,8 @@
   <property name="src.test" location="src/test"/>
   <property name="src.etc" location="src/etc"/>
   
-  <import file="../opensymphony/common/osbuild.xml" />
+  <property name="common.build" value="../opensymphony/common/osbuild.xml"/>
+  <import file="${common.build}"/>
   
     <path id="jalopy.classpath">
         <fileset dir="lib/build/jalopy">
