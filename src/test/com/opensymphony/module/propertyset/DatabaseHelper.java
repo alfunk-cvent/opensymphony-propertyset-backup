@@ -111,7 +111,7 @@ public class DatabaseHelper {
         URL propertySet = DatabaseHelper.class.getResource("/com/opensymphony/module/propertyset/hibernate/PropertySetItemImpl.hbm.xml");
         Assert.assertTrue(propertySet != null);
         configuration.addURL(propertySet);
-
+        configuration.setProperty("hibernate.dialect", "net.sf.hibernate.dialect.MckoiDialect");
         new SchemaExport(configuration).create(false, true);
 
         return configuration;
