@@ -1,81 +1,173 @@
 <project default="jar" basedir=".">
-  
+
   <property name="src.test" location="src/test"/>
   <property name="src.etc" location="src/etc"/>
-  
-  <property name="common.build" value="../opensymphony/common/osbuild.xml"/>
-  <import file="${common.build}"/>
-  
-    <path id="jalopy.classpath">
-        <fileset dir="lib/build/jalopy">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
 
-    <taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin">
-        <classpath refid="jalopy.classpath"/>
+  <property name="common.build" value="../opensymphony/common/osbuild.xml"/>
+  <property name="providers" location="providers"/>
+
+  <import file="${common.build}"/>
+
+  <path id="providers.cp">
+    <path refid="cp" />
+    <fileset dir="${providers}">
+      <include name="*/lib/*.jar"/>
+    </fileset>
+    <pathelement location="${build.java}"/>
+    <pathelement location="${providers}/ejb/build"/>
+    <pathelement location="${providers}/ejb3/build"/>
+    <pathelement location="${providers}/hibernate/build"/>
+    <pathelement location="${providers}/ofbiz/build"/>
+    <pathelement location="${providers}/ojb/build"/>
+  </path>
+  
+  <path id="jalopy.classpath">
+    <fileset dir="lib/build/jalopy">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin">
+    <classpath refid="jalopy.classpath"/>
+  </taskdef>
+
+  <target name="clean" depends="common.clean">
+    <delete>
+      <fileset dir="${providers}/ejb/src/com/opensymphony/module/propertyset/ejb">
+        <exclude name="**/*EJB*.java"/>
+      </fileset>
+    </delete>
+    <delete includeemptydirs="true">
+      <fileset dir="${providers}">
+        <include name="*/build/**"/>
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="ejbdoclet" depends="init">
+    <taskdef name="ejbdoclet" classname="xdoclet.modules.ejb.EjbDocletTask">
+      <classpath>
+        <path refid="cp" />
+        <fileset dir="${providers}/ejb/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
     </taskdef>
 
-    <target name="clean" depends="common.clean">
-        <delete>
-            <fileset dir="${src.java}/com/opensymphony/module/propertyset/ejb">
-                <exclude name="**/*EJB*.java"/>
-            </fileset>
-        </delete>
-    </target>
+    <ejbdoclet ejbspec="2.0" verbose="false" destdir="${providers}/ejb/src">
+      <fileset dir="${providers}/ejb/src">
+        <include name="com/opensymphony/module/propertyset/ejb/**/*EJB.java"/>
+      </fileset>
+      <remoteinterface/>
+      <localinterface/>
+      <homeinterface/>
+      <localhomeinterface/>
+      <!--<valueobject/>-->
+      <!--<entitypk/>-->
+      <entitycmp/>
+      <!--<session/>-->
+      <utilobject pattern="{0}HomeFactory" cacheHomes="true"/>
+      <deploymentdescriptor destdir="${providers}/ejb/build/META-INF" validatexml="true" description="OpenSymphony PropertySet"
+                            displayname="PropertySet Module"/>
+      <jboss version="3.0" destdir="${providers}/ejb/build/META-INF"/>
+      <weblogic version="7.0" destdir="${providers}/ejb/build/META-INF" datasource="defaultDS" createtables="true"/>
+      <jrun version="4.0" destdir="${providers}/ejb/build/META-INF"/>
+      <orion version="2.0" destdir="${providers}/ejb/build/META-INF"/>
+    </ejbdoclet>
+  </target>
 
-    <target name="ejbdoclet" depends="init">
-      <taskdef name="ejbdoclet" classname="xdoclet.modules.ejb.EjbDocletTask" classpathref="cp"/>
+  <target name="test-compile" unless="skip.tests">
+    <compile srcdir="${src.test}" destdir="${build.test}" classpathref="providers.cp" />
 
-        <ejbdoclet ejbspec="2.0" verbose="false" destdir="${src.java}">
-            <fileset dir="${src.java}">
-                <include name="com/opensymphony/module/propertyset/ejb/**/*EJB.java"/>
-            </fileset>
-            <remoteinterface/>
-            <localinterface/>
-            <homeinterface/>
-            <localhomeinterface/>
-            <!--<valueobject/>-->
-            <!--<entitypk/>-->
-            <entitycmp/>
-            <!--<session/>-->
-            <utilobject pattern="{0}HomeFactory" cacheHomes="true"/>
-            <deploymentdescriptor destdir="${build.java}/META-INF" validatexml="true" description="OpenSymphony PropertySet" displayname="PropertySet Module"/>
-            <jboss version="3.0" destdir="${build.java}/META-INF"/>
-            <weblogic version="7.0" destdir="${build.java}/META-INF" datasource="defaultDS" createtables="true"/>
-            <jrun version="4.0" destdir="${build.java}/META-INF"/>
-            <orion version="2.0" destdir="${build.java}/META-INF"/>
-        </ejbdoclet>
-    </target>
+    <taskdef resource="clovertasks"/>
+    <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
 
-    <target name="compile" depends="common.compile">
-        <copy file="${src.etc}/propertyset-default.xml" todir="${build.java}/META-INF"/>
-    </target>
+    <mkdir dir="${build.clover}"/>
+    <clover-setup initString="${build.clover}/coverage.db">
+      <files>
+        <exclude name="${src.test}/**/*.java"/>
+      </files>
+    </clover-setup>
 
-    <target name="precompile" depends="ejbdoclet">
-        <jalopy fileformat="unix" convention="src/etc/jalopy.xml" history="file" historymethod="adler32" loglevel="error" threads="2" classpathref="cp">
-            <fileset dir="${src.java}">
-                <include name="**/*.java"/>
-            </fileset>
-            <fileset dir="${src.test}">
-                <include name="**/*.java"/>
-            </fileset>
-        </jalopy>
-    </target>
+    <compile srcdir="${src.java}" destdir="${build.java-test}" />
+    <provider-compile provider="ejb3" source="1.5" destdir="${build.java-test}" />
+    <provider-compile provider="ejb" destdir="${build.java-test}" />
+    <provider-compile provider="hibernate" destdir="${build.java-test}" />
+    <provider-compile provider="ofbiz" destdir="${build.java-test}" />
+    <provider-compile provider="ojb" destdir="${build.java-test}" />
+  </target>
 
-    <target name="ejb-jar" depends="compile">
-        <mkdir dir="${dist}"/>
-        <jar basedir="${build.java}" jarfile="${dist}/${name}-ejb-${version}.jar" manifest="${src.etc}/manifest-ejb.txt">
-            <exclude name="**/ofbiz/**"/>
-        </jar>
-    </target>
+  <target name="test" depends="junit-check, clover-check, compile, test-compile" description="run tests"
+          unless="skip.tests">
+    <path id="providers.junit.cp">
+      <path refid="junit.cp" />
+      <path refid="providers.cp" />
+    </path>
+    <run-junit classpathref="providers.junit.cp"/>
+  </target>
 
-    <target name="ofbiz-jar" depends="compile">
-        <mkdir dir="${dist}"/>
-        <jar basedir="${build.java}" jarfile="${dist}/${name}-ofbiz-${version}.jar">
-            <include name="**/ofbiz/**"/>
-        </jar>
-    </target>
+  <target name="compile" depends="common.compile">
+    <copy file="${src.etc}/propertyset-default.xml" todir="${build.java}/META-INF"/>
+    <provider-compile provider="ejb" />
+    <provider-compile provider="ejb3" source="1.5"/>
+    <provider-compile provider="hibernate" />
+    <provider-compile provider="ofbiz" />
+    <provider-compile provider="ojb" />
+  </target>
+
+  <target name="precompile" depends="ejbdoclet">
+    <jalopy fileformat="unix" convention="src/etc/jalopy.xml" history="file" historymethod="adler32" loglevel="error"
+            threads="2" classpathref="cp">
+      <fileset dir="${src.java}">
+        <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${src.test}">
+        <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${providers}">
+        <include name="**/*.java"/>
+        <exclude name="ejb3/**/*Entry*.java"/>
+      </fileset>
+    </jalopy>
+  </target>
+
+  <target name="jar" depends="common.jar">
+    <mkdir dir="${dist}"/>
+    <provider-jar provider="ejb" manifest="${src.etc}/manifest-ejb.txt" />
+    <provider-jar provider="ofbiz" />
+    <provider-jar provider="hibernate" />
+    <provider-jar provider="ejb3" />
+    <provider-jar provider="ojb" />
+  </target>
   
+  <macrodef name="provider-compile">
+    <attribute name="provider" />
+    <attribute name="source" default="${compile.version}" />
+    <attribute name="destdir" default="${providers}/@{provider}/build" />
+    <sequential>
+      <path id="@{provider}.cp">
+        <path refid="cp" />
+        <fileset dir="${providers}/@{provider}/lib">
+          <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${build.java}"/>
+      </path>
+      <compile srcdir="${providers}/@{provider}/src" destdir="@{destdir}" classpathref="@{provider}.cp" source="@{source}" target="@{source}"/>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="provider-jar">
+    <attribute name="provider" />
+    <attribute name="manifest" default="${jar.manifest}"/>
+    <sequential>
+      <jar basedir="${providers}/@{provider}/build" jarfile="${build}/${name}-@{provider}-${version}.jar" manifest="@{manifest}">
+        <manifest>
+          <attribute name="Implementation-Title" value="${fullname}-@{provider}"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+          <attribute name="Implementation-Vendor" value="OpenSymphony"/>
+        </manifest>        
+      </jar>
+    </sequential>
+  </macrodef>
 </project>
 

@@ -6,6 +6,7 @@ package com.opensymphony.module.propertyset.memory;
 
 import com.opensymphony.module.propertyset.AbstractPropertySetTest;
 
+
 /**
  * User: bbulger
  * Date: May 22, 2004
