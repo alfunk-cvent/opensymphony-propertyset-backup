@@ -1,0 +1,4 @@
+<entity-manager>
+  <name>propertyset</name>
+  <jta-data-source>jdbc/DefaultDS</jta-data-source>
+</entity-manager>

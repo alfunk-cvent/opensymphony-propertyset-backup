@@ -59,9 +59,9 @@ import com.opensymphony.module.propertyset.PropertySet;
  */
 import com.opensymphony.module.propertyset.memory.SerializablePropertySet;
 
-import com.opensymphony.util.XMLUtils;
-import com.opensymphony.util.TextUtils;
 import com.opensymphony.util.Data;
+import com.opensymphony.util.TextUtils;
+import com.opensymphony.util.XMLUtils;
 
 import org.w3c.dom.*;
 

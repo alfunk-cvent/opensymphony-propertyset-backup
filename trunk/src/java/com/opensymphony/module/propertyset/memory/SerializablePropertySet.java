@@ -29,6 +29,10 @@ import java.util.Map;
  * @see com.opensymphony.module.propertyset.memory.MemoryPropertySet
  */
 public class SerializablePropertySet extends MemoryPropertySet implements Serializable {
+    //~ Static fields/initializers /////////////////////////////////////////////
+
+    private static final long serialVersionUID = -4597532064799568453L;
+
     //~ Instance fields ////////////////////////////////////////////////////////
 
     private HashMap serialMap;
@@ -45,7 +49,7 @@ public class SerializablePropertySet extends MemoryPropertySet implements Serial
 
     protected synchronized void setImpl(int type, String key, Object value) throws IllegalPropertyException, DuplicatePropertyKeyException {
         if ((value != null) && !(value instanceof Serializable)) {
-            throw new IllegalPropertyException("Cannot set " + key + ". Value type " + value.getClass() + " not Serializable");
+            //throw new IllegalPropertyException("Cannot set " + key + ". Value type " + value.getClass() + " not Serializable");
         }
 
         super.setImpl(type, key, value);
