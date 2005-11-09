@@ -15,8 +15,9 @@ public class TestObject implements Serializable {
     //~ Instance fields ////////////////////////////////////////////////////////
 
     private long id;
+    private static final long serialVersionUID = 261939103282846342L;
 
-    //~ Constructors ///////////////////////////////////////////////////////////
+  //~ Constructors ///////////////////////////////////////////////////////////
 
     public TestObject(long id) {
         this.id = id;
@@ -33,6 +34,9 @@ public class TestObject implements Serializable {
             return true;
         }
 
+      if(obj == null) {
+        return false;
+      }
         if (this.getClass() != obj.getClass()) {
             return false;
         }
