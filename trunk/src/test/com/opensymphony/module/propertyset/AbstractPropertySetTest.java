@@ -22,7 +22,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * User: bbulger
  * Date: May 22, 2004
  */
-public class AbstractPropertySetTest extends TestCase {
+public abstract class AbstractPropertySetTest extends TestCase {
     //~ Instance fields ////////////////////////////////////////////////////////
 
     protected PropertySet ps;
