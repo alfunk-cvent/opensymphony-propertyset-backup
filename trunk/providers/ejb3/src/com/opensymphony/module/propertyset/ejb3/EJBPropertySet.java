@@ -35,29 +35,41 @@ import javax.persistence.Query;
 public class EJBPropertySet extends AbstractPropertySet {
     //~ Instance fields ////////////////////////////////////////////////////////
 
-    private EntityManager em;
+    private EntityManager entityManager;
     private Long entityId;
     private String entityName;
 
     //~ Methods ////////////////////////////////////////////////////////////////
 
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
     public Collection getKeys(String prefix, int type) throws PropertyException {
+        return getKeys(entityName, entityId, prefix, type);
+    }
+
+    public Collection getKeys(String entityName, long entityId, String prefix, int type) throws PropertyException {
         Query q;
 
         if ((type == 0) && (prefix == null)) {
-            q = em.createNamedQuery("keys");
+            q = entityManager.createNamedQuery("keys");
         }
         //all types with the specified prefix
         else if ((type == 0) && (prefix != null)) {
-            q = em.createNamedQuery("keys.prefix");
+            q = entityManager.createNamedQuery("keys.prefix");
             q.setParameter("prefix", prefix + '%');
         }
         //type and prefix
         else if ((prefix == null) && (type != 0)) {
-            q = em.createNamedQuery("keys.type");
+            q = entityManager.createNamedQuery("keys.type");
             q.setParameter("type", type);
         } else {
-            q = em.createNamedQuery("keys.prefixAndType");
+            q = entityManager.createNamedQuery("keys.prefixAndType");
             q.setParameter("prefix", prefix + '%');
             q.setParameter("type", type);
         }
@@ -69,8 +81,12 @@ public class EJBPropertySet extends AbstractPropertySet {
     }
 
     public int getType(String key) throws PropertyException {
+        return getType(entityName, entityId, key);
+    }
+
+    public int getType(String entityName, long entityId, String key) throws PropertyException {
         EntryPK pk = new EntryPK(entityName, entityId, key);
-        PropertyEntry entry = em.find(PropertyEntry.class, pk);
+        PropertyEntry entry = entityManager.find(PropertyEntry.class, pk);
 
         if (entry == null) {
             return 0;
@@ -80,8 +96,12 @@ public class EJBPropertySet extends AbstractPropertySet {
     }
 
     public boolean exists(String key) throws PropertyException {
+        return exists(entityName, entityId, key);
+    }
+
+    public boolean exists(String entityName, long entityId, String key) throws PropertyException {
         EntryPK pk = new EntryPK(entityName, entityId, key);
-        PropertyEntry entry = em.find(PropertyEntry.class, pk);
+        PropertyEntry entry = entityManager.find(PropertyEntry.class, pk);
 
         return entry != null;
     }
@@ -97,22 +117,30 @@ public class EJBPropertySet extends AbstractPropertySet {
             throw new IllegalArgumentException("factory specifies is of type '" + obj.getClass() + "' which does not implement " + EntityManager.class.getName());
         }
 
-        this.em = (EntityManager) obj;
+        this.entityManager = (EntityManager) obj;
         this.entityId = ((Number) args.get("entityId")).longValue();
         this.entityName = (String) args.get("entityName");
     }
 
     public void remove(String key) throws PropertyException {
-        EntryPK pk = new EntryPK(entityName, entityId, key);
-        PropertyEntry entry = em.find(PropertyEntry.class, pk);
-
-        if (entry != null) {
-            em.remove(entry);
-        }
+        remove(entityName, entityId, key);
     }
 
     public void remove() throws PropertyException {
-        Query q = em.createQuery("delete PropertyEntry p where p.primaryKey.entityId=:entityId and p.primaryKey.entityName=:entityName");
+        remove(entityName, entityId);
+    }
+
+    public void remove(String entityName, long entityId, String key) throws PropertyException {
+        EntryPK pk = new EntryPK(entityName, entityId, key);
+        PropertyEntry entry = entityManager.find(PropertyEntry.class, pk);
+
+        if (entry != null) {
+            entityManager.remove(entry);
+        }
+    }
+
+    public void remove(String entityName, long entityId) throws PropertyException {
+        Query q = entityManager.createQuery("delete PropertyEntry p where p.primaryKey.entityId=:entityId and p.primaryKey.entityName=:entityName");
         q.setParameter("entityId", entityId);
         q.setParameter("entityName", entityName);
         q.executeUpdate();
@@ -127,10 +155,14 @@ public class EJBPropertySet extends AbstractPropertySet {
     }
 
     protected void setImpl(int type, String key, Object value) throws PropertyException {
+        setImpl(entityName, entityId, type, key, value);
+    }
+
+    protected void setImpl(String entityName, long entityId, int type, String key, Object value) throws PropertyException {
         EntryPK pk = new EntryPK(entityName, entityId, key);
         PropertyEntry item;
 
-        item = em.find(PropertyEntry.class, pk);
+        item = entityManager.find(PropertyEntry.class, pk);
 
         boolean update = item != null;
 
@@ -203,15 +235,19 @@ public class EJBPropertySet extends AbstractPropertySet {
         }
 
         if (update) {
-            em.merge(item);
+            entityManager.merge(item);
         } else {
-            em.persist(item);
+            entityManager.persist(item);
         }
     }
 
     protected Object get(int type, String key) throws PropertyException {
+        return get(entityName, entityId, type, key);
+    }
+
+    protected Object get(String entityName, long entityId, int type, String key) throws PropertyException {
         EntryPK pk = new EntryPK(entityName, entityId, key);
-        PropertyEntry entry = em.find(PropertyEntry.class, pk);
+        PropertyEntry entry = entityManager.find(PropertyEntry.class, pk);
 
         if (entry == null) {
             return null;
