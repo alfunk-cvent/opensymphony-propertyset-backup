@@ -98,7 +98,7 @@ public class EJBPropertySet extends AbstractPropertySet {
         }
 
         this.em = (EntityManager) obj;
-        this.entityId = (Long) args.get("entityId");
+        this.entityId = ((Number) args.get("entityId")).longValue();
         this.entityName = (String) args.get("entityName");
     }
 
