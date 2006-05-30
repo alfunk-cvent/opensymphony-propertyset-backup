@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 
@@ -162,6 +163,19 @@ public class EJBPropertySet extends AbstractPropertySet {
         EntryPK pk = new EntryPK(entityName, entityId, key);
         PropertyEntry item;
 
+        boolean mustCommit = false;
+
+        try {
+            entityManager.joinTransaction();
+        } catch (Exception ex) {
+            EntityTransaction tx = entityManager.getTransaction();
+
+            if (!tx.isActive()) {
+                tx.begin();
+                mustCommit = true;
+            }
+        }
+
         item = entityManager.find(PropertyEntry.class, pk);
 
         boolean update = item != null;
@@ -238,6 +252,10 @@ public class EJBPropertySet extends AbstractPropertySet {
             entityManager.merge(item);
         } else {
             entityManager.persist(item);
+        }
+
+        if (mustCommit) {
+            entityManager.getTransaction().commit();
         }
     }
 
