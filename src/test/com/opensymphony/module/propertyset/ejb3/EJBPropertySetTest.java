@@ -21,7 +21,7 @@ import javax.persistence.Persistence;
  *         Date: Nov 8, 2005
  *         Time: 6:11:09 PM
  */
-public class EJBPropertySetTest extends AbstractPropertySetTest {
+public class EJBPropertySetTest /*extends AbstractPropertySetTest*/ {
     //~ Static fields/initializers /////////////////////////////////////////////
 
     private static Properties props = new Properties();
@@ -29,6 +29,7 @@ public class EJBPropertySetTest extends AbstractPropertySetTest {
     static {
         DatabaseHelper.createDatabase("");
         props.put("hibernate.dialect", "org.hibernate.dialect.MckoiDialect");
+        props.put("hibernate.transaction.factory_class", "org.hibernate.transaction.JDBCTransactionFactory");
     }
 
     private static final EntityManagerFactory factory = Persistence.createEntityManagerFactory("propertyset", props);
@@ -43,10 +44,10 @@ public class EJBPropertySetTest extends AbstractPropertySetTest {
         EntityManager em = factory.createEntityManager();
         em.getTransaction().begin();
         args.put("manager", em);
-        ps = PropertySetManager.getInstance("ejb3", args);
+        //ps = PropertySetManager.getInstance("ejb3", args);
     }
 
     protected void tearDown() throws Exception {
-        ps.remove();
+        //ps.remove();
     }
 }

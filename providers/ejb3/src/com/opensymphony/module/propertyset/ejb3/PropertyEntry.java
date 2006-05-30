@@ -16,13 +16,13 @@ import org.hibernate.annotations.Index;
 @Entity
 @Table(name="OS_PROPERTIES")
 @NamedQueries({
-@NamedQuery(name="keys", queryString="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId"),
-@NamedQuery(name="keys.prefix", queryString="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.primaryKey.key like :prefix"),
-@NamedQuery(name="keys.type", queryString="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.type=:type"),
-@NamedQuery(name="keys.prefixAndType", queryString="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.type=:type and p.primaryKey.key like :prefix")
+@NamedQuery(name="keys", query="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId"),
+@NamedQuery(name="keys.prefix", query="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.primaryKey.key like :prefix"),
+@NamedQuery(name="keys.type", query="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.type=:type"),
+@NamedQuery(name="keys.prefixAndType", query="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.type=:type and p.primaryKey.key like :prefix")
 })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@org.hibernate.annotations.Table(name="OS_PROPERTYENTRY", indexes = 
+@org.hibernate.annotations.Table(appliesTo="PropertyEntry", indexes = 
 {
   @Index(name="os_PropertyEntry_keyidx", columnNames = {"entityName","entityId", "keyName" }),
   @Index(name="os_PropertyEntry_allidx", columnNames = {"entityName","entityId"})
@@ -127,7 +127,7 @@ public class PropertyEntry
     this.stringValue = stringValue;
   }
 
-  @Lob(type = LobType.CLOB)
+  @Lob
   public String getTextValue()
   {
     return textValue;
