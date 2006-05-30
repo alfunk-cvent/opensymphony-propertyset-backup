@@ -11,7 +11,6 @@ import junit.framework.Assert;
 import net.sf.hibernate.cfg.Configuration;
 import net.sf.hibernate.tool.hbm2ddl.SchemaExport;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -68,13 +67,13 @@ public class DatabaseHelper {
             connection = ds.getConnection();
             statement = connection.createStatement();
 
-            String[] sqls = StringUtils.split(sql, ";");
+            String[] sqls = sql.split(";");
 
             for (int i = 0; i < sqls.length; i++) {
-                sqlLine = StringUtils.stripToEmpty(sqls[i]);
-                sqlLine = StringUtils.replace(sqlLine, "\r", "");
-                sqlLine = StringUtils.replace(sqlLine, "\n", "");
-
+                sqlLine = sqls[i].trim();
+                sqlLine.replace("\r", "");
+                sqlLine.replace("\n", "");
+  
                 //String s = sqls[i];
                 if ((sqlLine.length() > 0) && (sqlLine.charAt(0) != '#')) {
                     try {
