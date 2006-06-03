@@ -23,12 +23,14 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.spi.PersistenceUnitTransactionType;
 
 
 /**
  * EJB3 propertyset implementation.
- * The only additional init arg required over entityId and entityName is 'manager', which is the
- * entity manager to use.
+ * This implementation requires a couple of extra init args:
+ * <li><code>manager</code>: Entity manager to use.
+ * <li><code>transaction</code>: Can be either JTA or RESOURCE_LOCAL.
  * @author Hani Suleiman
  *         Date: Nov 8, 2005
  *         Time: 4:51:53 PM
@@ -38,9 +40,35 @@ public class EJBPropertySet extends AbstractPropertySet {
 
     private EntityManager entityManager;
     private Long entityId;
+    private PersistenceUnitTransactionType transactionType;
     private String entityName;
 
+    //~ Constructors ///////////////////////////////////////////////////////////
+
+    public EJBPropertySet() {
+    }
+
+    public EJBPropertySet(EntityManager entityManager, PersistenceUnitTransactionType transactionType) {
+        this.entityManager = entityManager;
+        this.transactionType = transactionType;
+    }
+
+    public EJBPropertySet(EntityManager entityManager, PersistenceUnitTransactionType transactionType, Long entityId, String entityName) {
+        this.entityManager = entityManager;
+        this.entityId = entityId;
+        this.entityName = entityName;
+        this.transactionType = transactionType;
+    }
+
     //~ Methods ////////////////////////////////////////////////////////////////
+
+    public void setEntityId(Long entityId) {
+        this.entityId = entityId;
+    }
+
+    public Long getEntityId() {
+        return entityId;
+    }
 
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -48,6 +76,14 @@ public class EJBPropertySet extends AbstractPropertySet {
 
     public EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public String getEntityName() {
+        return entityName;
     }
 
     public Collection getKeys(String prefix, int type) throws PropertyException {
@@ -79,6 +115,14 @@ public class EJBPropertySet extends AbstractPropertySet {
         q.setParameter("entityName", entityName);
 
         return q.getResultList();
+    }
+
+    public void setTransactionType(PersistenceUnitTransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public PersistenceUnitTransactionType getTransactionType() {
+        return transactionType;
     }
 
     public int getType(String key) throws PropertyException {
@@ -121,6 +165,9 @@ public class EJBPropertySet extends AbstractPropertySet {
         this.entityManager = (EntityManager) obj;
         this.entityId = ((Number) args.get("entityId")).longValue();
         this.entityName = (String) args.get("entityName");
+
+        Object tx = args.get("transaction");
+        this.transactionType = (tx == null) ? PersistenceUnitTransactionType.RESOURCE_LOCAL : PersistenceUnitTransactionType.valueOf(tx.toString());
     }
 
     public void remove(String key) throws PropertyException {
@@ -165,15 +212,22 @@ public class EJBPropertySet extends AbstractPropertySet {
 
         boolean mustCommit = false;
 
-        try {
+        switch (transactionType) {
+        case JTA:
             entityManager.joinTransaction();
-        } catch (Exception ex) {
+
+            break;
+
+        case RESOURCE_LOCAL:
+
             EntityTransaction tx = entityManager.getTransaction();
 
             if (!tx.isActive()) {
                 tx.begin();
                 mustCommit = true;
             }
+
+            break;
         }
 
         item = entityManager.find(PropertyEntry.class, pk);

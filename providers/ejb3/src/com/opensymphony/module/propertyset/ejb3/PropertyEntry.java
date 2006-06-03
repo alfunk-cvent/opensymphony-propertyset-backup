@@ -24,7 +24,6 @@ import org.hibernate.annotations.Index;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.hibernate.annotations.Table(appliesTo="PropertyEntry", indexes = 
 {
-  @Index(name="os_PropertyEntry_keyidx", columnNames = {"entityName","entityId", "keyName" }),
   @Index(name="os_PropertyEntry_allidx", columnNames = {"entityName","entityId"})
 })
 public class PropertyEntry
