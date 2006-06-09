@@ -16,6 +16,7 @@ import org.hibernate.annotations.Index;
 @Entity
 @Table(name="OS_PROPERTIES")
 @NamedQueries({
+@NamedQuery(name="entries", query="select p from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId"),
 @NamedQuery(name="keys", query="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId"),
 @NamedQuery(name="keys.prefix", query="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.primaryKey.key like :prefix"),
 @NamedQuery(name="keys.type", query="select p.primaryKey.key from PropertyEntry p where p.primaryKey.entityName=:entityName and p.primaryKey.entityId=:entityId and p.type=:type"),
