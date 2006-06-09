@@ -187,7 +187,7 @@ public class EJBPropertySet extends AbstractPropertySet {
 
     public void remove(String entityName, long entityId) throws PropertyException {
         boolean mustCommit = joinTransaction();
-        Query q = entityManager.createNamedQuery("values");
+        Query q = entityManager.createNamedQuery("entries");
         q.setParameter("entityId", entityId);
         q.setParameter("entityName", entityName);
 
