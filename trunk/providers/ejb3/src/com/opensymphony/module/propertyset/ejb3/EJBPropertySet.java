@@ -16,9 +16,7 @@ import org.w3c.dom.Document;
 import java.io.IOException;
 import java.io.Serializable;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -188,10 +186,22 @@ public class EJBPropertySet extends AbstractPropertySet {
     }
 
     public void remove(String entityName, long entityId) throws PropertyException {
-        Query q = entityManager.createQuery("delete PropertyEntry p where p.primaryKey.entityId=:entityId and p.primaryKey.entityName=:entityName");
+        boolean mustCommit = joinTransaction();
+        Query q = entityManager.createNamedQuery("values");
         q.setParameter("entityId", entityId);
         q.setParameter("entityName", entityName);
-        q.executeUpdate();
+
+        //idiot jalopy blows up on a real man's for loop, so we have to use jdk14 wanky version
+        List l = q.getResultList();
+
+        for (Iterator iterator = l.iterator(); iterator.hasNext();) {
+            Object o = iterator.next();
+            entityManager.remove(o);
+        }
+
+        if (mustCommit) {
+            entityManager.getTransaction().commit();
+        }
     }
 
     public boolean supportsType(int type) {
@@ -210,25 +220,7 @@ public class EJBPropertySet extends AbstractPropertySet {
         EntryPK pk = new EntryPK(entityName, entityId, key);
         PropertyEntry item;
 
-        boolean mustCommit = false;
-
-        switch (transactionType) {
-        case JTA:
-            entityManager.joinTransaction();
-
-            break;
-
-        case RESOURCE_LOCAL:
-
-            EntityTransaction tx = entityManager.getTransaction();
-
-            if (!tx.isActive()) {
-                tx.begin();
-                mustCommit = true;
-            }
-
-            break;
-        }
+        boolean mustCommit = joinTransaction();
 
         item = entityManager.find(PropertyEntry.class, pk);
 
@@ -362,6 +354,30 @@ public class EJBPropertySet extends AbstractPropertySet {
         }
 
         throw new PropertyException("type " + type(type) + " not supported");
+    }
+
+    private boolean joinTransaction() {
+        boolean mustCommit = false;
+
+        switch (transactionType) {
+        case JTA:
+            entityManager.joinTransaction();
+
+            break;
+
+        case RESOURCE_LOCAL:
+
+            EntityTransaction tx = entityManager.getTransaction();
+
+            if (!tx.isActive()) {
+                tx.begin();
+                mustCommit = true;
+            }
+
+            break;
+        }
+
+        return mustCommit;
     }
 
     /**
