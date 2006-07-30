@@ -126,7 +126,7 @@
       </fileset>
       <fileset dir="${providers}">
         <include name="**/*.java"/>
-        <exclude name="ejb3/**/*Entry*.java"/>
+        <exclude name="ejb3/**/*.java"/>
       </fileset>
     </jalopy>
   </target>
