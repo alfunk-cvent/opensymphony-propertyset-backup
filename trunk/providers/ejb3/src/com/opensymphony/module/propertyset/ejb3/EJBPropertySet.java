@@ -318,7 +318,7 @@ public class EJBPropertySet extends AbstractPropertySet {
         }
 
         if (entry.getType() != type) {
-            throw new PropertyException("key '" + key + "' does not have matching type of " + type(type));
+            throw new PropertyException("key '" + key + "' does not have matching type of " + type(type) + ", but is of type " + type(entry.getType()));
         }
 
         switch (type) {
