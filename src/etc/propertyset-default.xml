@@ -14,7 +14,7 @@
         <arg name="col.number" value="NUMBER_VALUE"/>
     </propertyset>
     <propertyset name="ejb" class="com.opensymphony.module.propertyset.ejb.EJBPropertySet"/>
-    <propertyset name="ejb3" class="com.opensymphony.module.propertyset.ejb3.EJBPropertySet"/>
+    <propertyset name="ejb3" class="com.opensymphony.module.propertyset.ejb3.EJBPropertySetImpl"/>
     <propertyset name="javabeans" class="com.opensymphony.module.propertyset.javabeans.BeanIntrospectorPropertySet"/>
     <propertyset name="map" class="com.opensymphony.module.propertyset.map.MapPropertySet"/>
     <propertyset name="memory" class="com.opensymphony.module.propertyset.memory.MemoryPropertySet"/>
