@@ -496,4 +496,9 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
       throw new PropertyImplementationException("Cannot serialize XML", e);
     }
   }
+
+  public String toString()
+  {
+    return "EJBPropertySetImpl#" + hashCode() + "{entityManager=" + entityManager + ", entityId=" + entityId + ", entityName='" + entityName + '\'' + ", inContainer=" + inContainer + '}';
+  }
 }
