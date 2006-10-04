@@ -158,6 +158,7 @@ public class PropertyEntry
     this.type = type;
   }
 
+  @Lob
   public byte[] getData()
   {
     return data;
@@ -168,6 +169,7 @@ public class PropertyEntry
     this.data = data;
   }
 
+  @Lob
   public byte[] getObjectData()
   {
     return objectData;
