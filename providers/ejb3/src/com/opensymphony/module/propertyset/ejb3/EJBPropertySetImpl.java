@@ -10,6 +10,7 @@ import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.ejb.Remove;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -41,6 +42,7 @@ import org.w3c.dom.Document;
  *         Time: 4:51:53 PM
  */
 @Stateful(name = "OSPropertySet")
+@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public class EJBPropertySetImpl extends AbstractPropertySet implements EJBPropertySet
 {
   private EntityManager entityManager;
@@ -171,6 +173,7 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
     return getType(entityName, entityId, key);
   }
 
+  @TransactionAttribute
   public int getType(String entityName, long entityId, String key) throws PropertyException
   {
     EntryPK pk = new EntryPK(entityName, entityId, key);
@@ -189,6 +192,7 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
     return exists(entityName, entityId, key);
   }
 
+  @TransactionAttribute
   public boolean exists(String entityName, long entityId, String key) throws PropertyException
   {
     EntryPK pk = new EntryPK(entityName, entityId, key);
@@ -276,6 +280,7 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
     return true;
   }
 
+  @TransactionAttribute
   protected void setImpl(int type, String key, Object value) throws PropertyException
   {
     setImpl(entityName, entityId, type, key, value);
@@ -388,6 +393,7 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
     return get(entityName, entityId, type, key);
   }
 
+  @TransactionAttribute
   protected Object get(String entityName, long entityId, int type, String key) throws PropertyException
   {
     EntryPK pk = new EntryPK(entityName, entityId, key);

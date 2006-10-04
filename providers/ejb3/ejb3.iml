@@ -27,16 +27,16 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="propertyset" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/pitchfork.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ejb3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="propertyset" />
     <orderEntryProperties />
   </component>
 </module>

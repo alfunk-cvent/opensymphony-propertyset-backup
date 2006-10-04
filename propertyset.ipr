@@ -9,8 +9,6 @@
   <component name="CodeStyleProjectProfileManger">
     <option name="PROJECT_PROFILE" />
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
-    <scopes />
-    <profiles />
   </component>
   <component name="CodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS" />
@@ -79,7 +77,7 @@
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
     <scopes />
     <profiles>
-      <profile version="1.0">
+      <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
         <used_levels>
@@ -101,44 +99,32 @@
           </server>
         </used_levels>
         <inspection_tool class="InfiniteLoopStatement" level="WARNING" enabled="false" />
-        <inspection_tool class="ILLEGAL_DEPENDENCY" level="WARNING" enabled="true" />
         <inspection_tool class="ResultSetIndexZero" level="ERROR" enabled="true" />
         <inspection_tool class="RedundantTypeArguments" level="WARNING" enabled="false" />
-        <inspection_tool class="HardCodedString" level="WARNING" enabled="false" />
         <inspection_tool class="SerializableWithUnconstructableAncestor" level="WARNING" enabled="true" />
         <inspection_tool class="ConstantConditions" level="WARNING" enabled="false">
           <option name="SUGGEST_NULLABLE_ANNOTATIONS" value="false" />
         </inspection_tool>
-        <inspection_tool class="DuplicateStringLiteral" level="WARNING" enabled="false" />
         <inspection_tool class="ReadResolveAndWriteReplaceProtected" level="WARNING" enabled="true" />
         <inspection_tool class="LengthOneStringsInConcatenation" level="WARNING" enabled="true" />
-        <inspection_tool class="UNUSED_THROWS" level="WARNING" enabled="true" />
-        <inspection_tool class="EJB_ERROR" level="ERROR" enabled="true" />
         <inspection_tool class="ReturnFromFinallyBlock" level="WARNING" enabled="false" />
         <inspection_tool class="CloneCallsSuperClone" level="WARNING" enabled="false" />
         <inspection_tool class="UnnecessaryBoxing" level="WARNING" enabled="false" />
-        <inspection_tool class="WRONG_PACKAGE_STATEMENT" level="WARNING" enabled="true" />
         <inspection_tool class="ManualArrayCopy" level="WARNING" enabled="false" />
         <inspection_tool class="IgnoreResultOfCall" level="WARNING" enabled="false">
           <option name="m_reportAllNonLibraryCalls" value="false" />
           <option name="callCheckString" value="java.io.InputStream,read,java.io.InputStream,skip,java.lang.StringBuffer,toString,java.lang.StringBuilder,toString,java.lang.String,.*,java.math.BigInteger,.*,java.math.BigDecimal,.*,java.net.InetAddress,.*" />
         </inspection_tool>
         <inspection_tool class="ThrowFromFinallyBlock" level="WARNING" enabled="false" />
-        <inspection_tool class="UNKNOWN_JAVADOC_TAG" level="ERROR" enabled="true" />
         <inspection_tool class="AbstractMethodOverridesAbstractMethod" level="WARNING" enabled="true" />
         <inspection_tool class="FinalStaticMethod" level="WARNING" enabled="false" />
         <inspection_tool class="SuspiciousMethodCalls" level="WARNING" enabled="false" />
         <inspection_tool class="ResultOfObjectAllocationIgnored" level="WARNING" enabled="true" />
-        <inspection_tool class="ACCESS_STATIC_VIA_INSTANCE" level="WARNING" enabled="true" />
         <inspection_tool class="UnnecessaryUnboxing" level="WARNING" enabled="false" />
         <inspection_tool class="NoExplicitFinalizeCalls" level="WARNING" enabled="false" />
         <inspection_tool class="FinalPrivateMethod" level="WARNING" enabled="false" />
-        <inspection_tool class="EJB_WARNING" level="WARNING" enabled="true" />
-        <inspection_tool class="StringLiteral" level="WARNING" enabled="false" />
-        <inspection_tool class="DEPRECATED_SYMBOL" level="WARNING" enabled="true" />
         <inspection_tool class="SynchronizeOnNonFinalField" level="WARNING" enabled="false" />
         <inspection_tool class="TrivialIf" level="WARNING" enabled="false" />
-        <inspection_tool class="JAVADOC_ERROR" level="ERROR" enabled="true" />
         <inspection_tool class="ObjectEqualsNull" level="WARNING" enabled="false" />
         <inspection_tool class="UnnecessaryBlockStatement" level="WARNING" enabled="true" />
         <inspection_tool class="EmptyFinallyBlock" level="WARNING" enabled="false" />
@@ -152,7 +138,6 @@
         <inspection_tool class="AssertAsName" level="WARNING" enabled="true" />
         <inspection_tool class="TextLabelInSwitchStatement" level="ERROR" enabled="true" />
         <inspection_tool class="OctalLiteral" level="WARNING" enabled="false" />
-        <inspection_tool class="ThrowGenericClass" level="WARNING" enabled="false" />
         <inspection_tool class="InfiniteRecursion" level="WARNING" enabled="false" />
         <inspection_tool class="EmptyCatchBlock" level="WARNING" enabled="false">
           <option name="m_includeComments" value="true" />
@@ -170,7 +155,6 @@
         <inspection_tool class="EmptySynchronizedStatement" level="WARNING" enabled="true" />
         <inspection_tool class="UnnecessaryDefault" level="WARNING" enabled="true" />
         <inspection_tool class="IncompatibleMask" level="WARNING" enabled="false" />
-        <inspection_tool class="SILLY_ASSIGNMENT" level="WARNING" enabled="true" />
         <inspection_tool class="ExtendsObject" level="WARNING" enabled="false" />
         <inspection_tool class="SerialVersionUIDNotStaticFinal" level="WARNING" enabled="true" />
         <inspection_tool class="EmptyTryBlock" level="WARNING" enabled="false" />
@@ -409,6 +393,15 @@
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+  </component>
+  <component name="StarteamVcsAdapter" />
+  <component name="VssVcs" />
+  <component name="com.intellij.jsf.UserDefinedFacesConfigs">
+    <option name="USER_DEFINED_CONFIGS">
+      <value>
+        <list size="0" />
+      </value>
+    </option>
   </component>
   <component name="libraryTable" />
   <component name="uidesigner-configuration">
