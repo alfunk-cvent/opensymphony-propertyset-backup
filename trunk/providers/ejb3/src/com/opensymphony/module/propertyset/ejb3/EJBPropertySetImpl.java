@@ -120,6 +120,11 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
     return entityName;
   }
 
+  public void clear()
+  {
+    entityManager.clear();
+  }
+  
   public Collection getKeys(String prefix, int type) throws PropertyException
   {
     return getKeys(entityName, entityId, prefix, type);

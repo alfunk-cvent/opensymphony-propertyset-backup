@@ -17,4 +17,9 @@ public interface EJBPropertySet extends PropertySet
 
   @Remove
   void destroy();
+
+  /**
+   * Clear the entity manager
+   */
+  void clear();
 }
