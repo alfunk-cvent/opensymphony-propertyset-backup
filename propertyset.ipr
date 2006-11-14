@@ -200,17 +200,6 @@
         <inspection_tool class="JSUnresolvedVariable" level="WARNING" enabled="true" />
         <inspection_tool class="JSUnresolvedFunction" level="WARNING" enabled="true" />
         <inspection_tool class="JSUndeclaredVariable" level="WARNING" enabled="true" />
-        <inspection_tool class="AnalyzingVariableNaming" level="WARNING" enabled="true">
-          <option name="CHECK_STATIC_FINAL_FIELDS" value="false" />
-          <option name="CHECK_STATIC_FIELDS" value="true" />
-          <option name="CHECK_FIELDS" value="true" />
-          <option name="CHECK_PARAMETERS" value="true" />
-        </inspection_tool>
-        <inspection_tool class="AnalyzingLoggingWithoutLogLevelCheck" level="WARNING" enabled="true">
-          <option name="CHECK_DEBUG" value="true" />
-          <option name="CHECK_INFO" value="false" />
-          <option name="IGNORE_SIMPLE_STATEMENTS" value="true" />
-        </inspection_tool>
         <inspection_tool class="UnnecessaryModuleDependencyInspection" level="WARNING" enabled="true" />
       </profile>
     </profiles>
@@ -396,6 +385,7 @@
   </component>
   <component name="StarteamVcsAdapter" />
   <component name="VssVcs" />
+  <component name="XSLT-Support.FileAssociationsManager" />
   <component name="com.intellij.jsf.UserDefinedFacesConfigs">
     <option name="USER_DEFINED_CONFIGS">
       <value>
