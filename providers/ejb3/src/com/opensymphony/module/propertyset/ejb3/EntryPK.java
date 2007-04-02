@@ -2,17 +2,21 @@ package com.opensymphony.module.propertyset.ejb3;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  * @author Hani Suleiman
  *         Date: Nov 8, 2005
  *         Time: 5:57:51 PM
  */
+@Embeddable
 public class EntryPK implements Serializable
 {
   private static final long serialVersionUID = -6909978213448050937L;
   private String entityName;
   private long entityId;
+  
+  @Column(name="keyName")
   private String key;
 
   public EntryPK()
@@ -46,7 +50,6 @@ public class EntryPK implements Serializable
     this.entityId = entityId;
   }
 
-  @Column(name="keyName")
   public String getKey()
   {
     return key;
