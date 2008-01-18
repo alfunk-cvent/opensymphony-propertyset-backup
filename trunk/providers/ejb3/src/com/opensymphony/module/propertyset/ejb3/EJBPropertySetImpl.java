@@ -301,8 +301,6 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
 
     item = entityManager.find(PropertyEntry.class, pk);
 
-    boolean update = item != null;
-
     if(item == null)
     {
       item = new PropertyEntry();
@@ -378,19 +376,71 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
         throw new PropertyException("type " + type + " not supported");
     }
 
-    if(update)
-    {
-      entityManager.merge(item);
-    }
-    else
-    {
-      entityManager.persist(item);
-    }
-
+    entityManager.merge(item);
     if(mustCommit)
     {
       entityManager.getTransaction().commit();
     }
+  }
+
+  @TransactionAttribute
+  public void setAsActualType(String key, Object value) throws PropertyException {
+    super.setAsActualType(key, value);
+  }
+
+  @TransactionAttribute
+  public void setBoolean(String key, boolean value) {
+    super.setBoolean(key, value);
+  }
+
+  @TransactionAttribute
+  public void setDate(String key, Date value) {
+    super.setDate(key, value);
+  }
+
+  @TransactionAttribute
+  public void setData(String key, byte[] value) {
+    super.setData(key, value);
+  }
+
+  @TransactionAttribute
+  public void setDouble(String key, double value) {
+    super.setDouble(key, value);
+  }
+
+  @TransactionAttribute
+  public void setInt(String key, int value) {
+    super.setInt(key, value);
+  }
+
+  @TransactionAttribute
+  public void setLong(String key, long value) {
+    super.setLong(key, value);
+  }
+
+  @TransactionAttribute
+  public void setObject(String key, Object value) {
+    super.setObject(key, value);
+  }
+
+  @TransactionAttribute
+  public void setProperties(String key, Properties value) {
+    super.setProperties(key, value);
+  }
+
+  @TransactionAttribute
+  public void setText(String key, String value) {
+    super.setText(key, value);
+  }
+
+  @TransactionAttribute
+  public void setString(String key, String value) {
+    super.setString(key, value);
+  }
+
+  @TransactionAttribute
+  public void setXML(String key, Document value) {
+    super.setXML(key, value);
   }
 
   protected Object get(int type, String key) throws PropertyException
