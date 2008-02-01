@@ -130,6 +130,7 @@ public class EJBPropertySetImpl extends AbstractPropertySet implements EJBProper
     return getKeys(entityName, entityId, prefix, type);
   }
 
+  @TransactionAttribute
   public Collection getKeys(String entityName, long entityId, String prefix, int type) throws PropertyException
   {
     Query q;
