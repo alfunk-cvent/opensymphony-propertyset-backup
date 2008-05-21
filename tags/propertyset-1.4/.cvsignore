@@ -1,0 +1,4 @@
+build
+dist
+*.i*
+.classpath
