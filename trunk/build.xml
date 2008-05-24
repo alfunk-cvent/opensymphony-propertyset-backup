@@ -3,7 +3,7 @@
   <property name="src.test" location="src/test"/>
   <property name="src.etc" location="src/etc"/>
 
-  <property name="common.build" value="../opensymphony/common/osbuild.xml"/>
+  <property name="common.build" value="osbuild.xml"/>
   <property name="providers" location="providers"/>
 
   <import file="${common.build}"/>
@@ -17,6 +17,7 @@
     <pathelement location="${providers}/ejb/build"/>
     <pathelement location="${providers}/ejb3/build"/>
     <pathelement location="${providers}/hibernate/build"/>
+    <pathelement location="${providers}/hibernate3/build"/>
     <pathelement location="${providers}/ofbiz/build"/>
     <pathelement location="${providers}/ojb/build"/>
   </path>
@@ -93,6 +94,7 @@
     <provider-compile provider="ejb3" source="1.5" destdir="${build.java-test}" />
     <provider-compile provider="ejb" destdir="${build.java-test}" />
     <provider-compile provider="hibernate" destdir="${build.java-test}" />
+    <provider-compile provider="hibernate3" destdir="${build.java-test}" />
     <provider-compile provider="ofbiz" destdir="${build.java-test}" />
     <provider-compile provider="ojb" destdir="${build.java-test}" />
   </target>
@@ -111,6 +113,7 @@
     <provider-compile provider="ejb" />
     <provider-compile provider="ejb3" source="1.5"/>
     <provider-compile provider="hibernate" />
+    <provider-compile provider="hibernate3" />
     <provider-compile provider="ofbiz" />
     <provider-compile provider="ojb" />
   </target>
@@ -136,6 +139,7 @@
     <provider-jar provider="ejb" manifest="${src.etc}/manifest-ejb.txt" />
     <provider-jar provider="ofbiz" />
     <provider-jar provider="hibernate" />
+    <provider-jar provider="hibernate3" />
     <provider-jar provider="ejb3" />
     <provider-jar provider="ojb" />
   </target>
