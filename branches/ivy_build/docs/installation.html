@@ -1,0 +1,178 @@
+<html>
+<head>
+<title>OSCore Installation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="main.css" type="text/css">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<h1>PropertySet Installation</h1>
+<p>Just as the <a href="requirements.html">requirements</a> alluded to, there 
+  are two different ways to install OSCore: deployable <b>oscore.jar</b> as an 
+  EJB module to an application server, or including <b>oscore.jar</b> as a library 
+  in a web module.</p>
+<h3>EJB Installation</h3>
+<p>We cannot possible provide installation details for every applications server 
+  that OSCore supports natively or otherwise. We can, however, provide general 
+  information that may be useful for deploying either the EJB module or the example 
+  EAR module included.</p>
+<p>When deployable oscore in one of your existing J2EE applications, you'll want 
+  to add the following to your application.xml file:</p>
+<pre>&lt;module&gt;
+
+	&lt;ejb&gt;oscore.jar&lt;/ejb&gt;
+
+&lt;/module&gt;
+</pre>
+<p>If your applications server isn't supported natively by OSCore, you'll need 
+  to create vendor-specific deployment descriptors to handle non-standard tags 
+  such as JNDI names, CMP mappings, and datasource names. For your convenience, 
+  the standard JNDI names and recommended CMP mappings are listed below:</p>
+<table width="75%" border="1" align="center">
+  <tr> 
+    <td>Bean</td>
+    <td>JNDI Name</td>
+    <td>CMP Mappings</td>
+  </tr>
+  <tr> 
+    <td>Sequence</td>
+    <td>os.Sequence</td>
+    <td> 
+      <p><b>Table name</b>: OS_SEQUENCE<br>
+        <b>name</b> -&gt; NAME<br>
+        <b>actualCount</b> -&gt; COUNT</p>
+    </td>
+  </tr>
+  <tr> 
+    <td>SequenceGenerator</td>
+    <td>os.SequenceGenerator</td>
+    <td>N/A</td>
+  </tr>
+  <tr> 
+    <td>PropertyString</td>
+    <td>os.PropertyString</td>
+    <td><b>Table name</b>: OS_PROPERTYSTRING<br>
+      <b>id</b> -&gt; ID<br>
+      <b>string</b> -&gt; VALUE</td>
+  </tr>
+  <tr> 
+    <td>PropertyNumber</td>
+    <td>os.PropertyString</td>
+    <td><b>Table name</b>: OS_PROPERTYNUMBER<br>
+      <b>id</b> -&gt; ID<br>
+      <b>number </b>-&gt; VALUE</td>
+  </tr>
+  <tr> 
+    <td>PropertyDecimal</td>
+    <td>os.PropertyDecimal</td>
+    <td><b>Table name</b>: OS_PROPERTYDECIMAL<br>
+      <b>id</b> -&gt; ID<br>
+      <b>decimal</b> -&gt; VALUE</td>
+  </tr>
+  <tr> 
+    <td>PropertyData</td>
+    <td>os.PropertyData</td>
+    <td><b>Table name</b>: OS_PROPERTYDATA<br>
+      <b>id</b> -&gt; ID<br>
+      <b>bytes</b> -&gt; VALUE</td>
+  </tr>
+  <tr> 
+    <td>PropertyDate</td>
+    <td>os.PropertyDate</td>
+    <td><b>Table name</b>: OS_PROPERTYDATE<br>
+      <b>id</b> -&gt; ID<br>
+      <b>date</b> -&gt; VALUE</td>
+  </tr>
+  <tr>
+    <td>PropertyEntry</td>
+    <td>os.PropertyEntry</td>
+    <td><b>Table name</b>: OS_PROPERTYENTRY<br>
+      <b>id</b> -&gt; ID<br>
+      <b>entityName</b> -&gt; ENTITYNAME<br>
+      <b>entityId</b> -&gt; ENTITYID<br>
+      <b>type</b> -&gt; TYPE<br>
+      <b>key</b> -&gt; KEYVALUE</td>
+  </tr>
+  <tr> 
+    <td>PropertyStore</td>
+    <td>os.PropertyStore</td>
+    <td>N/A</td>
+  </tr>
+</table>
+<p>If you do create any vendor-specific deployment descriptors for any app servers 
+  not currently natively supports by OSCore, please email us the files at <a href="mailto:opensymphony-discuss@lists.sourceforge.net">opensymphony-discuss@lists.sourceforge.net</a>.</p>
+<p>Besides the installation notes for the EJB installation, you may need to also 
+  read the <i>Non-EJB Installation</i> below, depending on your specific use of 
+  OSCore. </p>
+<h3>Non-EJB Installation</h3>
+<p>If you aren't going to be using the SequenceGenerator EJB or the EJB implementation 
+  of the ProperySet module, you won't have to bother with the above installation 
+  notes. However, depending on which implementations and providers you utilize 
+  for the various OSCore components, some specific installation tasks will be 
+  required. </p>
+<p><b>OFBizPropertySet implementation</b></p>
+<p>Besides ensuring that ofbcore-entity.jar and ofbcore-share.jar are accessible 
+  in the library path (usually <b>WEB-INF/lib</b>), you'll aso be required to 
+  edit/create some <a href="http://www.ofbiz.org">OpenForBuisness</a> XML descriptors 
+  used by the Ofbiz Entity Engine. Visit the OpenForBusiness site for more information 
+  on how to configure the Entity Engine. </p>
+<p>You'll also want to add the following info to your <b>entitygroup.xml</b> file:</p>
+<pre>	&lt;entity-group group=&quot;default&quot; entity=&quot;OSPropertyEntry&quot; /&gt;
+	&lt;entity-group group=&quot;default&quot; entity=&quot;OSPropertyString&quot; /&gt;
+	&lt;entity-group group=&quot;default&quot; entity=&quot;OSPropertyData&quot; /&gt;
+	&lt;entity-group group=&quot;default&quot; entity=&quot;OSPropertyDate&quot; /&gt;
+	&lt;entity-group group=&quot;default&quot; entity=&quot;OSPropertyDecimal&quot; /&gt;
+	&lt;entity-group group=&quot;default&quot; entity=&quot;OSPropertyNumber&quot; /&gt;
+</pre>
+<p>If you don't have the <i>sequence entity</i> already configured in your <b>entitygroup.xml</b> 
+  file, you'll also want to add:</p>
+<pre>	&lt;entity-group group=&quot;default&quot; entity=&quot;SequenceValueItem&quot; /&gt;</pre>
+<p>In your <b>entitymodel.xml</b> file, the following must be added:</p>
+<pre>	&lt;entity entity-name=&quot;OSPropertyEntry&quot; table-name=&quot;propertyentry&quot; package-name=&quot;&quot;&gt;
+		&lt;field name=&quot;id&quot; type=&quot;numeric&quot;/&gt;
+		&lt;field name=&quot;entityName&quot; type=&quot;long-varchar&quot;/&gt;
+		&lt;field name=&quot;entityId&quot; type=&quot;numeric&quot;/&gt;
+		&lt;field name=&quot;propertyKey&quot; type=&quot;long-varchar&quot;/&gt;
+		&lt;field name=&quot;type&quot; col-name=&quot;propertytype&quot; type=&quot;integer&quot;/&gt;
+		&lt;prim-key field=&quot;id&quot;/&gt;
+	&lt;/entity&gt;</pre>
+<pre>	&lt;entity entity-name=&quot;OSPropertyString&quot; table-name=&quot;propertystring&quot; package-name=&quot;&quot;&gt;
+		&lt;field name=&quot;id&quot; type=&quot;numeric&quot;/&gt;
+		&lt;field name=&quot;value&quot; col-name=&quot;propertyvalue&quot; type=&quot;very-long&quot;/&gt;
+		&lt;prim-key field=&quot;id&quot;/&gt;
+	&lt;/entity&gt;</pre>
+<pre>	&lt;entity entity-name=&quot;OSPropertyDate&quot; table-name=&quot;propertydate&quot; package-name=&quot;&quot;&gt;
+		&lt;field name=&quot;id&quot; type=&quot;numeric&quot;/&gt;
+		&lt;field name=&quot;value&quot; col-name=&quot;propertyvalue&quot; type=&quot;date-time&quot;/&gt;
+		&lt;prim-key field=&quot;id&quot;/&gt;
+	&lt;/entity&gt;</pre>
+<pre>	&lt;entity entity-name=&quot;OSPropertyData&quot; table-name=&quot;propertydata&quot; package-name=&quot;&quot;&gt;
+		&lt;field name=&quot;id&quot; type=&quot;numeric&quot;/&gt;
+		&lt;field name=&quot;value&quot; col-name=&quot;propertyvalue&quot; type=&quot;blob&quot;/&gt;
+		&lt;prim-key field=&quot;id&quot;/&gt;
+	&lt;/entity&gt;</pre>
+<pre>	&lt;entity entity-name=&quot;OSPropertyDecimal&quot; table-name=&quot;propertydecimal&quot; package-name=&quot;&quot;&gt;
+		&lt;field name=&quot;id&quot; type=&quot;numeric&quot;/&gt;
+		&lt;field name=&quot;value&quot; col-name=&quot;propertyvalue&quot; type=&quot;floating-point&quot;/&gt;
+		&lt;prim-key field=&quot;id&quot;/&gt;
+	&lt;/entity&gt;</pre>
+<pre>	&lt;entity entity-name=&quot;OSPropertyNumber&quot; table-name=&quot;propertynumber&quot; package-name=&quot;&quot;&gt;
+		&lt;field name=&quot;id&quot; type=&quot;numeric&quot;/&gt;
+		&lt;field name=&quot;value&quot; col-name=&quot;propertyvalue&quot; type=&quot;numeric&quot;/&gt;
+		&lt;prim-key field=&quot;id&quot;/&gt;
+	&lt;/entity&gt;</pre>
+<p>Likewise, if you didn't have the <i>sequence entity</i> already configured, 
+  you need to also add the following to your <b>entitymodel.xml</b> file:</p>
+<pre>	&lt;entity entity-name=&quot;SequenceValueItem&quot; package-name=&quot;&quot;&gt;
+		&lt;field name=&quot;seqName&quot; type=&quot;id-long-ne&quot;&gt;&lt;/field&gt;
+		&lt;field name=&quot;seqId&quot; type=&quot;numeric&quot;&gt;&lt;/field&gt;
+		&lt;prim-key field=&quot;seqName&quot; /&gt;
+	&lt;/entity&gt;</pre>
+<p><b>Log4J Logging implementation</b></p>
+<p>If you are going to use Log4J as your logging provider, you'll need log4.jar 
+  included in your application library path. You'll also need a <b>log4j.properties</b> 
+  file somewhere in the application's library path, as Log4J requires this file 
+  to be available in order to function properly. You can read more about the Log4J 
+  configuration <a href="http://jakarta.apache.org/log4j/docs/index.html">here</a>.</p>
+</body>
+</html>
