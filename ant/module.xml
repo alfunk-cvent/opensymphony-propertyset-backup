@@ -1,0 +1,116 @@
+<project name="module">
+
+<!-- ====================================================================== -->
+<!-- REQUIRED INPUTS -->
+<!-- 		project.group.id -->
+<!-- 		project.artifact.id -->
+<!-- 		project.version -->
+<!-- OPTIONAL INPUTS -->
+<!-- 		project.name -->
+<!-- 		project.description -->
+<!--        project.packaging - defaults to jar -->
+<!-- ====================================================================== -->
+
+
+<!-- ====================================================================== -->
+<!-- PROJECT PROPERTIES -->
+<!-- ====================================================================== -->
+
+	<property name="project.base.dir" value="${basedir}" />
+	<property name="project.lib.dir" value="${basedir}/lib" />
+	<property name="project.build.dir" value="${project.base.dir}/target" />
+	<property name="project.build.output.dir" value="${project.build.dir}/classes" />
+	<property name="project.build.final.name" value="${project.artifact.id}-${project.version}" />
+	<property name="project.build.test.output.dir" value="${project.build.dir}/test-classes" />
+	<property name="project.build.source.dir" value="${project.base.dir}/src/main/java" />
+	<property name="project.build.test.source.dir" value="${project.base.dir}/src/test/java" />
+	<property name="project.build.resource.dir" value="${project.base.dir}/src/main/resources" />
+	<property name="project.build.test.resource.dir" value="${project.base.dir}/src/test/resources" />
+
+<!-- ====================================================================== -->
+<!-- COMMON PROPERTIES -->
+<!-- ====================================================================== -->
+
+	<property name="help.detail" value="false" />
+	<property name="help.indent.size" value="2" />
+	<property name="help.line.length" value="80" />
+	<property name="build.timestamp.format" value="yyyyMMdd-HHmm" />
+	<property name="build.lib.pattern" value="${project.lib.dir}/[conf]/[artifact]-[revision].[ext]" />
+
+
+<!-- ====================================================================== -->
+<!-- DEFAULT PLUG-INS -->
+<!-- ====================================================================== -->
+
+	<import file="clean-plugin.xml" />
+
+<!-- ====================================================================== -->
+<!-- CLEAN LIFECYCLE -->
+<!-- ====================================================================== -->
+
+	<target name="pre-clean">
+        <!-- configure ivy here? -->
+	</target>
+
+	<target name="clean" depends="pre-clean, clean:build" />
+
+	<target name="post-clean" depends="clean" />
+
+<!-- ====================================================================== -->
+<!-- BUILD LIFECYCLE -->
+<!-- ====================================================================== -->
+
+	<!-- check that required properties are set -->
+	<target name="validate" />
+	
+	<!-- set project properties and create directories -->
+	<target name="initialize" depends="validate">
+        <tstamp>
+            <format property="build.timestamp" pattern="${build.timestamp.format}" />
+        </tstamp>
+        <!-- configure ivy here? -->
+	</target>
+
+	<target name="generate-sources" depends="initialize" />
+
+	<target name="process-sources" depends="generate-sources" />
+
+	<target name="generate-resources" depends="process-sources" />
+
+	<target name="process-resources" depends="generate-resources" />
+
+	<target name="compile" depends="process-resources" />
+
+	<target name="process-classes" depends="compile" />
+
+	<target name="generate-test-sources" depends="process-classes" />
+
+	<target name="process-test-sources" depends="generate-test-sources" />
+
+	<target name="generate-test-resources" depends="process-test-sources" />
+
+	<target name="process-test-resources" depends="generate-test-resources" />
+
+	<target name="test-compile" depends="process-test-resources" />
+
+	<target name="process-test-classes" depends="test-compile" />
+
+	<target name="test" depends="process-test-classes" />
+
+	<target name="prepare-package" depends="test" />
+
+	<target name="package" depends="prepare-package" />
+
+	<target name="pre-integration-test" depends="package" />
+
+	<target name="integration-test" depends="pre-integration-test" />
+
+	<target name="post-integration-test" depends="integration-test" />
+
+	<target name="verify" depends="post-integration-test" />
+
+	<target name="publish" depends="verify" />
+
+	<target name="deploy" depends="publish" />
+
+</project>
