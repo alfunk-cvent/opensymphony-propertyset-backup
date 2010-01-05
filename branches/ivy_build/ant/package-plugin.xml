@@ -1,0 +1,27 @@
+<project name="package-plugin" xmlns:ivy="antlib:org.apache.ivy.ant">
+<!-- **********************************************************************
+		INPUTS
+		
+		
+		help.detail
+		help.indent.size
+		help.line.length
+		help.goal - if provided displays help for the specified goal, otherwise displays help for all goals
+
+		
+     ********************************************************************** -->
+
+	<target name="package:jar">
+		<ivy:retrieve conf="runtime" />
+	</target>
+
+	<target name="package:test-jar">
+	</target>
+
+	<target name="package:source-jar">
+	</target>
+
+	<target name="package:help">
+	</target>
+	
+</project>

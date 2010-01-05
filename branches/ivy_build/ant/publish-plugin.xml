@@ -1,0 +1,21 @@
+<project name="publish-plugin">
+<!-- **********************************************************************
+		INPUTS
+		
+		
+		help.detail
+		help.indent.size
+		help.line.length
+		help.goal - if provided displays help for the specified goal, otherwise displays help for all goals
+
+		
+     ********************************************************************** -->
+
+
+	<target name="publish:publish">
+	</target>
+
+	<target name="publish:help">
+	</target>
+	
+</project>
