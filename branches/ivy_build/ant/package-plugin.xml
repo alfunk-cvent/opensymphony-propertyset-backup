@@ -12,13 +12,35 @@
      ********************************************************************** -->
 
 	<target name="package:jar">
-		<ivy:retrieve conf="runtime" />
+		<ivy:retrieve conf="runtime" pattern="${build.lib.pattern}" sync="true" />
+
+		<jar basedir="${project.build.output.dir}" jarfile="${project.build.dir}/${project.build.final.name}.jar">
+			<manifest>
+				<attribute name="Implementation-Title" value="${project.artifact.id}"/>
+				<attribute name="Implementation-Version" value="${project.version}"/>
+				<attribute name="Implementation-Vendor" value="OpenSymphony"/>
+			</manifest>
+		</jar>
 	</target>
 
 	<target name="package:test-jar">
+		<jar basedir="${project.build.test.output.dir}" jarfile="${project.build.dir}/${project.build.final.name}-tests.jar">
+			<manifest>
+				<attribute name="Implementation-Title" value="${project.artifact.id}"/>
+				<attribute name="Implementation-Version" value="${project.version}"/>
+				<attribute name="Implementation-Vendor" value="OpenSymphony"/>
+			</manifest>
+		</jar>
 	</target>
 
 	<target name="package:source-jar">
+		<jar basedir="${project.build.source.dir}" jarfile="${project.build.dir}/${project.build.final.name}-sources.jar">
+			<manifest>
+				<attribute name="Implementation-Title" value="${project.artifact.id}"/>
+				<attribute name="Implementation-Version" value="${project.version}"/>
+				<attribute name="Implementation-Vendor" value="OpenSymphony"/>
+			</manifest>
+		</jar>
 	</target>
 
 	<target name="package:help">
