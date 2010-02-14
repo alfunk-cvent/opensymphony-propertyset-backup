@@ -11,6 +11,7 @@
 	<import file="compiler-plugin.xml" />
 	<import file="test-plugin.xml" />
 	<import file="package-plugin.xml" />
+	<import file="publish-plugin.xml" />
 
 <!-- ====================================================================== -->
 <!-- PROJECT PROPERTIES -->
@@ -38,4 +39,6 @@
 
 	<target name="package" depends="module.package, package:jar, package:test-jar, package:source-jar" />
 
+	<target name="publish" depends="module.publish, publish:publish" />
+	
 </project>

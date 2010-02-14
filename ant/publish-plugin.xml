@@ -1,4 +1,4 @@
-<project name="publish-plugin">
+<project name="publish-plugin" xmlns:ivy="antlib:org.apache.ivy.ant">
 <!-- **********************************************************************
 		INPUTS
 		
@@ -13,6 +13,7 @@
 
 
 	<target name="publish:publish">
+		<ivy:publish resolver="local" pubrevision="${project.version}" artifactspattern="${project.build.output.dir}/[artifact]-[revision].[ext]" />
 	</target>
 
 	<target name="publish:help">
