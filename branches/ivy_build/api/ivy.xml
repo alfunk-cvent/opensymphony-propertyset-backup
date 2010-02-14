@@ -10,7 +10,7 @@
     </configurations>
 
     <publications>
-    	<artifact name="master" />
+    	<artifact name="propertyset-api" type="jar" conf="master" />
     </publications>
 
     <dependencies>

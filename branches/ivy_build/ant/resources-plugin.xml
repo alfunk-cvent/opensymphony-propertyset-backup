@@ -18,11 +18,23 @@
 	<!-- copies resources from main source to main output directory, optionally filtering on copy -->
 	<target name="resources:resources">
 		<mkdir dir="${project.build.output.dir}" />
+		
+		<copy todir="${project.build.output.dir}">
+			<fileset dir="${project.build.resource.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- copies resources from test source to test output directory, optionally filtering on copy -->
 	<target name="resources:test-resources">
 		<mkdir dir="${project.build.test.output.dir}" />
+
+		<copy todir="${project.build.test.output.dir}">
+			<fileset dir="${project.build.test.resource.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="resources:help">
