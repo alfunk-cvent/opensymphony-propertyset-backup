@@ -5,14 +5,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.opensymphony</groupId>
-		<artifactId>propertyset</artifactId>
+		<groupId>com.opensymphony.propertyset</groupId>
+		<artifactId>parent</artifactId>
 		<version>1.5.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>propertyset-api</artifactId>
+	<groupId>com.opensymphony.propertyset</groupId>
+	<artifactId>api</artifactId>
 	<packaging>jar</packaging>
 
-	<name>PropertySet - API</name>
+	<name>PropertySet -> API</name>
 	<description></description>
 
 	<dependencies>
