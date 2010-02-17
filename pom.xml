@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.opensymphony</groupId>
+	<artifactId>propertyset</artifactId>
+	<version>1.5.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>PropertySet</name>
+	<description>
+		PropertySet is a persistence-agnostic module that can be used to fulfill storage requirements in applications 
+		that can change constantly. An example of this might be a "User Preferences" storage device. It may be 
+		impossible to know what the user can store at any given time in your application's lifecycle, so employing a 
+		PropertySet can help. Backed by XML, EJB, Ofbiz, JDBC, Castor JDO, or any other persistence mechanism, you can 
+		provide a complete typed key-value pair implementation.
+	</description>
+	<inceptionYear>2000</inceptionYear>
+	<url>http://www.opensymphony.com/propertyset</url>
+
+	<modules>
+		<module>api</module>
+		<module>core</module>
+	</modules>
+
+	<prerequisites>
+		<maven>2.0.9</maven>
+	</prerequisites>
+
+	<properties>
+		<jdkLevel>1.4</jdkLevel>
+	</properties>
+
+	<build>
+		<plugins>
+			<!--
+			<plugin>
+				<groupId>com.atlassian.maven.plugins</groupId>
+				<artifactId>maven-clover2-plugin</artifactId>
+				<configuration>
+					<licenseLocation>${basedir}/src/test/clover/clover.license</licenseLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<configuration>
+							<targetPercentage>50%</targetPercentage>
+						</configuration>
+						<phase>verify</phase>
+						<goals>
+							<goal>instrument</goal>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			-->
+		</plugins>
+	</build>
+  
+	<organization>
+		<name>OpenSymphony</name>
+		<url>http://www.opensymphony.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>skanjo</id>
+			<name>Samer Kanjo</name>
+			<email>samer@teamkanjo.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>-6</timezone>
+		</developer>
+	</developers>
+
+</project>
