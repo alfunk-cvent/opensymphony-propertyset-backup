@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>javax.ejb</groupId>
+	<artifactId>ejb</artifactId>
+	<version>2.0</version>
+
+	<name>Enterprise Java Beans(TM)</name>
+	<description>
+		The Enterprise JavaBeans architecture is a component architecture for the development and deployment of 
+		component-based distributed business applications. Applications written using the Enterprise JavaBeans 
+		architecture are scalable, transactional, and multi-user secure. These applications may be written once, 
+		and then deployed on any server platform that supports the Enterprise JavaBeans specification.
+	</description>
+
+	<organization>
+		<name>Sun Microsystems, Inc.</name>
+		<url>http://www.sun.com</url>
+	</organization>
+	<inceptionYear>2001</inceptionYear>
+        
+	<distributionManagement>
+		<downloadUrl>http://java.sun.com/products/ejb/docs.html</downloadUrl>
+	</distributionManagement>
+</project>

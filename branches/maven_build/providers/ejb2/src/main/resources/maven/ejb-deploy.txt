@@ -1,0 +1,22 @@
+HOW TO INSTALL THE EJB 2.0 INTERFACE CLASSES
+
+If you don't already have the EJB 2.0 JAR you can download it from the 
+following location:
+
+    http://java.sun.com/products/ejb/docs.html
+
+To deploy the ejb.jar file to your own shared/team repository copy the jar 
+into this directory and run the following command:
+
+    mvn deploy:deploy-file
+        -DpomFile=ejb.pom
+        -Dfile=ejb.jar
+        -DrepositoryId=YOUR_REPO_ID
+        -Durl=YOUR_REPO_URL
+
+To install the ejb.jar file to your local repository copy the jar into this 
+directory and run the following command:
+
+    mvn install:install-file
+        -DpomFile=ejb.pom
+        -Dfile=ejb.jar
