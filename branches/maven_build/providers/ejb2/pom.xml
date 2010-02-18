@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.opensymphony.propertyset.providers</groupId>
 	<artifactId>ejb2</artifactId>
-	<packaging>jar</packaging>
+	<packaging>ejb</packaging>
 
 	<name>PropertySet -> Providers -> EJB 2</name>
 	<description></description>
@@ -31,7 +31,44 @@
 			<groupId>javax.ejb</groupId>
 			<artifactId>ejb</artifactId>
 			<version>2.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xdoclet-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>xdoclet</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<ejbdoclet verbose="true" force="true" ejbSpec="2.0" destDir="${project.build.directory}/generated-sources/xdoclet">
+									<fileset dir="${project.build.sourceDirectory}">
+										<include name="**/*EJB.java"></include>
+									</fileset>
+									<remoteinterface/>
+									<localinterface/>
+									<homeinterface/>
+									<localhomeinterface/>
+									<entitycmp/>
+									<utilobject pattern="{0}HomeFactory" cacheHomes="yes"/>
+									<deploymentdescriptor destDir="${project.build.outputDirectory}/META-INF" validatexml="true" description="OpenSymphony PropertySet" displayname="PropertySet Module"/>
+									<jboss version="3.0" destdir="${project.build.outputDirectory}/META-INF"/>
+									<weblogic version="7.0" destdir="${project.build.outputDirectory}/META-INF" datasource="defaultDS" createtables="True"/>
+									<jrun version="4.0" destdir="${project.build.outputDirectory}/META-INF"/>
+									<orion version="2.0" destdir="${project.build.outputDirectory}/META-INF"/>
+								</ejbdoclet>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
