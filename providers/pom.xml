@@ -19,6 +19,7 @@
 
 	<modules>
 		<module>ejb2</module>
+		<module>ejb3</module>
 		<module>hibernate2</module>
 		<module>hibernate3</module>
 		<module>jdbc</module>
