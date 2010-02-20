@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.ofbiz.ofbcore</groupId>
+	<artifactId>ofbcore-entity</artifactId>
+	<version>2.1.1</version>
+
+	<name>OFBiz Core - Entity</name>
+	<description>
+		This came from the Maven 1 public Atlassian repository: http://maven.atlassian.com/content/groups/m1/. This file
+		could not be found anywhere on the offical site nor any project source repository. 
+	</description>
+
+	<organization>
+		<name>Apache Open For Business</name>
+		<url>http://ofbiz.apache.org</url>
+	</organization>
+        
+	<distributionManagement>
+		<downloadUrl>https://maven.atlassian.com/content/groups/m1/ofbcore/jars/</downloadUrl>
+	</distributionManagement>
+</project>

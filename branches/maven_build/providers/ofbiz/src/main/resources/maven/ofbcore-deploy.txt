@@ -1,0 +1,32 @@
+HOW TO INSTALL THE OFBIZ CORE CLASSES
+
+If you don't already have the entity and share JARs you can download them from 
+the following location:
+
+    https://maven.atlassian.com/content/groups/m1/ofbcore/jars/
+
+To deploy the the JAR files to your own shared/team repository copy the jar 
+into this directory and run the following command:
+
+    mvn deploy:deploy-file
+        -DpomFile=ofbcore-entity.pom
+        -Dfile=ofbcore-entity-2.1.1-atlassian.jar
+        -DrepositoryId=YOUR_REPO_ID
+        -Durl=YOUR_REPO_URL
+
+    mvn deploy:deploy-file
+        -DpomFile=ofbcore-share.pom
+        -Dfile=ofbcoire-share-2.1.1.jar
+        -DrepositoryId=YOUR_REPO_ID
+        -Durl=YOUR_REPO_URL
+
+To install the ejb.jar file to your local repository copy the jar into this 
+directory and run the following command:
+
+    mvn install:install-file
+        -DpomFile=ofbcore-entity.pom
+        -Dfile=ofbcore-entity-2.1.1-atlassian.jar
+
+    mvn install:install-file
+        -DpomFile=ofbcore-share.pom
+        -Dfile=ofbcoire-share-2.1.1.jar
