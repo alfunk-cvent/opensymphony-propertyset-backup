@@ -36,8 +36,24 @@
 		<repository>
 			<id>maven-repository.dev.java.net</id>
 			<name>Java.net Maven 1 Repository</name>
-			<layout>legacy</layout>
 			<url>http://download.java.net/maven/1/</url>
+			<layout>legacy</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<!-- This repo only needed to resolve very old OFBiz artifacts and the 
+		     only place I can find the ofbcore anywhere. In addition, the 
+			 checksum for the ofbcore artifacts fails so they checksum is being
+			 ignored for this repo. -->
+		<repository>
+			<id>maven-repository.atlassian.com</id>
+			<name>Atlassian Maven 1 Repository</name>
+			<url>http://maven.atlassian.com/content/groups/m1/</url>
+			<layout>legacy</layout>
+			<releases>
+				<checksumPolicy>ignore</checksumPolicy>
+			</releases>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -52,7 +68,7 @@
 			</snapshots>
 		</repository>
 	</repositories>
-	
+
 	<build>
 		<plugins>
 			<plugin>
