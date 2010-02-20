@@ -23,7 +23,7 @@
 		<module>hibernate2</module>
 		<module>hibernate3</module>
 		<module>jdbc</module>
-		<module>ofbiz</module>
+		<module>ofbiz2</module>
     </modules>
 
 </project>
