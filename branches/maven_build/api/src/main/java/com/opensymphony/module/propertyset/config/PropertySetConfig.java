@@ -4,6 +4,9 @@
  */
 package com.opensymphony.module.propertyset.config;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.*;
 
 import org.xml.sax.SAXException;
@@ -28,6 +31,7 @@ import javax.xml.parsers.*;
 public class PropertySetConfig {
     //~ Static fields/initializers /////////////////////////////////////////////
 
+    private static final Log logger = LogFactory.getLog(PropertySetConfig.class);
     private static PropertySetConfig config;
     private static final Object lock = new Object();
     private static final String[] CONFIG_LOCATIONS = new String[] {
@@ -163,10 +167,16 @@ public class PropertySetConfig {
      * @throws IllegalArgumentException     If none of the config files could be found.
      */
     private InputStream load() throws IllegalArgumentException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Loading configuration from specified locations...");
+        }
         InputStream is = null;
 
         for (int i = 0; i < CONFIG_LOCATIONS.length; i++) {
             String location = CONFIG_LOCATIONS[i];
+            if (logger.isDebugEnabled()) {
+                logger.debug("Attempting to load configuration from '" + location + "'");
+            }
 
             try {
                 URL resource = getResource(location, this.getClass());
@@ -180,12 +190,14 @@ public class PropertySetConfig {
                     return is;
                 }
             } catch (Exception e) {
-                //do nothing.
+                if (logger.isDebugEnabled()) {
+                    logger.error("Failed to load configuration from location '" + location + "'", e);
+                }
             }
         }
 
         if (is == null) {
-            String exceptionMessage = "Could not load propertyset config using '" + CONFIG_LOCATIONS + "'.  Please check your classpath.";
+            String exceptionMessage = "Could not load PropertySet configuration from the specified locations: '" + StringUtils.join(CONFIG_LOCATIONS, ',') + "'.  Please verify that the configuration file is in your classpath.";
             throw new IllegalArgumentException(exceptionMessage);
         }
 

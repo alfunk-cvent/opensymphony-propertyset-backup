@@ -3,106 +3,38 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>com.opensymphony.propertyset</groupId>
-	<artifactId>parent</artifactId>
-	<version>1.5.0-SNAPSHOT</version>
+	<artifactId>builder</artifactId>
+	<version>1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>PropertySet</name>
+	<name>PropertySet Builder</name>
 	<description>
-		PropertySet is a persistence-agnostic module that can be used to fulfill storage requirements in applications 
-		that can change constantly. An example of this might be a "User Preferences" storage device. It may be 
-		impossible to know what the user can store at any given time in your application's lifecycle, so employing a 
-		PropertySet can help. Backed by XML, EJB, Ofbiz, JDBC, Castor JDO, or any other persistence mechanism, you can 
+		PropertySet is a persistence-agnostic module that can be used to fulfill storage requirements in applications
+		that can change constantly. An example of this might be a "User Preferences" storage device. It may be
+		impossible to know what the user can store at any given time in your application's lifecycle, so employing a
+		PropertySet can help. Backed by XML, EJB, Ofbiz, JDBC, Castor JDO, or any other persistence mechanism, you can
 		provide a complete typed key-value pair implementation.
 	</description>
-	<inceptionYear>2000</inceptionYear>
 	<url>http://www.opensymphony.com/propertyset</url>
-
-	<modules>
-		<module>api</module>
-		<module>test</module>
-		<module>core</module>
-        <module>providers</module>
-    </modules>
-
-	<prerequisites>
-		<maven>2.0.9</maven>
-	</prerequisites>
-
-	<properties>
-	</properties>
-
-	<repositories>
-		<repository>
-			<id>maven-repository.dev.java.net</id>
-			<name>Java.net Maven 1 Repository</name>
-			<url>http://download.java.net/maven/1/</url>
-			<layout>legacy</layout>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>maven2-repository.dev.java.net</id>
-			<name>Java.net Maven 2 Repository</name>
-			<layout>default</layout>
-			<url>http://download.java.net/maven/2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.3</source>
-					<target>1.3</target>
-				</configuration>
-			</plugin>
-			<!--
-			<plugin>
-				<groupId>com.atlassian.maven.plugins</groupId>
-				<artifactId>maven-clover2-plugin</artifactId>
-				<configuration>
-					<licenseLocation>${basedir}/src/test/clover/clover.license</licenseLocation>
-				</configuration>
-				<executions>
-					<execution>
-						<configuration>
-							<targetPercentage>50%</targetPercentage>
-						</configuration>
-						<phase>verify</phase>
-						<goals>
-							<goal>instrument</goal>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			-->
-		</plugins>
-	</build>
-
+	<inceptionYear>2000</inceptionYear>
 	<organization>
 		<name>OpenSymphony</name>
 		<url>http://www.opensymphony.com</url>
 	</organization>
-
-	<developers>
-		<developer>
-			<id>skanjo</id>
-			<name>Samer Kanjo</name>
-			<email>samer@teamkanjo.com</email>
-			<roles>
-				<role>Developer</role>
-			</roles>
-			<timezone>-6</timezone>
-		</developer>
-	</developers>
-
+	<licenses>
+			<license>
+				<name>OpenSymphony Software License, Version 1.1</name>
+				<url>http://www/opensymphony.com/propertyset/license.action</url>
+			</license>
+	</licenses>
+	
+	<modules>
+		<module>api</module>
+		<module>core</module>
+		<module>parent</module>
+		<module>providers</module>
+	</modules>
+	
 </project>

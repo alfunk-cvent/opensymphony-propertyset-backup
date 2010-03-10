@@ -1,0 +1,254 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.opensymphony.propertyset</groupId>
+	<artifactId>parent</artifactId>
+	<version>1.5.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>PropertySet Parent</name>
+	<description>
+		PropertySet is a persistence-agnostic module that can be used to fulfill storage requirements in applications
+		that can change constantly. An example of this might be a "User Preferences" storage device. It may be
+		impossible to know what the user can store at any given time in your application's lifecycle, so employing a
+		PropertySet can help. Backed by XML, EJB, Ofbiz, JDBC, Castor JDO, or any other persistence mechanism, you can
+		provide a complete typed key-value pair implementation.
+	</description>
+	<url>http://www.opensymphony.com/propertyset</url>
+	<inceptionYear>2000</inceptionYear>
+	<organization>
+		<name>OpenSymphony</name>
+		<url>http://www.opensymphony.com</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>OpenSymphony Software License, Version 1.1</name>
+			<url>http://www/opensymphony.com/propertyset/license.action</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Hani Suileman</name>
+			<email>fate@formicary.com</email>
+			<roles>
+				<role>Project Leader</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Patrick Lightbody</name>
+			<email>plightbo@gmail.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>skanjo</id>
+			<name>Samer Kanjo</name>
+			<email>samer@teamkanjo.com</email>
+			<timezone>-6</timezone>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://jira.opensymphony.com</url>
+	</issueManagement>
+	<scm>
+		<connection>http://svn.opensymphony.com/svn/propertyset/trunk</connection>
+		<developerConnection>https://svn.opensymphony.com/svn/propertyset/trunk</developerConnection>
+		<url>http://svn.opensymphony.com/fisheye/browse/propertyset</url>
+	</scm>
+	<ciManagement>
+		<system>Bamboo</system>
+		<url>http://bamboo.opensymphony.com</url>
+	</ciManagement>
+
+	<prerequisites>
+		<maven>2.0.9</maven>
+	</prerequisites>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.2-beta-5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.1</version>
+					<configuration>
+						<source>${jdk.version}</source>
+						<target>${jdk.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.3</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<url>${pom.url}</url>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.6.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.4.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.1.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.1-beta-1</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<url>${pom.url}</url>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-help-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<!--
+			<plugin>
+			<groupId>com.atlassian.maven.plugins</groupId>
+			<artifactId>maven-clover2-plugin</artifactId>
+			<configuration>
+			<licenseLocation>${basedir}/src/test/clover/clover.license</licenseLocation>
+			</configuration>
+			<executions>
+			<execution>
+			<configuration>
+			<targetPercentage>50%</targetPercentage>
+			</configuration>
+			<phase>verify</phase>
+			<goals>
+			<goal>instrument</goal>
+			<goal>check</goal>
+			</goals>
+			</execution>
+			</executions>
+			</plugin>
+			-->
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>maven-repository.dev.java.net</id>
+			<name>Java.net Maven 1 Repository</name>
+			<url>http://download.java.net/maven/1/</url>
+			<layout>legacy</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Maven 2 Repository</name>
+			<layout>default</layout>
+			<url>http://download.java.net/maven/2/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>clover</groupId>
+			<artifactId>clover</artifactId>
+			<version>1.3.9</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<jdk.version>1.3</jdk.version>
+	</properties>
+
+</project>

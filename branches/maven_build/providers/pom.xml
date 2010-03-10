@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-		<groupId>com.opensymphony.propertyset</groupId>
-		<artifactId>parent</artifactId>
-        <version>1.5.0-SNAPSHOT</version>
-    </parent>
 	<groupId>com.opensymphony.propertyset.providers</groupId>
-    <artifactId>parent</artifactId>
+	<artifactId>builder</artifactId>
+	<version>1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>PropertySet -> Providers</name>
-	<description></description>
+	<name>PropertySet Providers Builder</name>
+	<description>
+		PropertySet is a persistence-agnostic module that can be used to fulfill storage requirements in applications
+		that can change constantly. An example of this might be a "User Preferences" storage device. It may be
+		impossible to know what the user can store at any given time in your application's lifecycle, so employing a
+		PropertySet can help. Backed by XML, EJB, Ofbiz, JDBC, Castor JDO, or any other persistence mechanism, you can
+		provide a complete typed key-value pair implementation.
+	</description>
+	<url>http://www.opensymphony.com/propertyset</url>
+	<inceptionYear>2000</inceptionYear>
+	<organization>
+		<name>OpenSymphony</name>
+		<url>http://www.opensymphony.com</url>
+	</organization>
+	<licenses>
+			<license>
+				<name>OpenSymphony Software License, Version 1.1</name>
+				<url>http://www/opensymphony.com/propertyset/license.action</url>
+			</license>
+	</licenses>
 
 	<modules>
 		<module>ejb2</module>
@@ -25,6 +39,8 @@
 		<module>jdbc</module>
 		<module>ofbiz2</module>
 		<module>ojb</module>
-    </modules>
+<!--
+-->
+	</modules>
 
 </project>
